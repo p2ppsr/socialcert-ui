@@ -1,0 +1,23 @@
+{
+  "short_name": "DiscordCert",
+  "name": "DiscordCert",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "babbage": {
+    "trust": {
+      "name": "DiscordCert",
+      "note": "Certifies discord account information",
+      "icon": "https://identicert.me/favicon.ico", 
+      "publicKey": "03285263f06139b66fb27f51cf8a92e9dd007c4c4b83876ad6c3e7028db450a4c2"
+    }
+  }
+}

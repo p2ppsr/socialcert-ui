@@ -1,0 +1,17 @@
+.persona_container {
+  align-items: center;
+  justify-content: center;
+}
+
+.persona_container>iframe {
+  height: 85vh;
+  max-width: min-content;
+  padding: 0.5em;
+}
+
+@media screen and (max-width: 900px) {
+  .persona_container>iframe {
+    height: 85vh;
+    width: 70vw;
+  }
+}
