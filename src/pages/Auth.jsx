@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-
 
     const Auth = () =>{
     const hostname = window.location.hostname;
