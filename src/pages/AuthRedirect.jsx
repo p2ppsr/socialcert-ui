@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import React from 'react'
-import getConstants from '../utils/getConstants'
-import './ipersona.css'
+import getConstants from '../components/utils/getConstants';
 import { Dialog } from '@mui/material'
-import Persona from 'persona'
 import { Signia } from 'babbage-signia'
 import { toast } from 'react-toastify'
 
