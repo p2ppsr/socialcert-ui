@@ -24,20 +24,25 @@ const AuthRedirect = () =>{
             })
             setSuccessStatus(true)
         })()
-        
-        
-
     }, []);
 
+    if(!successStatus){
+      return(
+        <div>
+        <div>Processing...</div>
+        <p>{progressStatus}</p>
+        </div>  
+      );
+    }
+
+    else{
    return (
+    
     <div>
-    <div>Processing...</div>
-    <p>{progressStatus}</p>
-    {successStatus && 
     <p>Successfully created certificate for discord information</p>
-      }
     </div>
   );
+} 
 }
 
 export default AuthRedirect
