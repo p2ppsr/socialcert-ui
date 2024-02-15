@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 
 const AuthRedirect = () =>{
   const [progressStatus, setProgressStatus] = useState("")
+  const [successStatus, setSuccessStatus] = useState(false)
   const constants = getConstants()
   const signia = new Signia()
   signia.config.confederacyHost = constants.confederacyUrl
@@ -21,6 +22,7 @@ const AuthRedirect = () =>{
             true, {accessCode: code}, async (message)=>{
               setProgressStatus(message)
             })
+            setSuccessStatus(true)
         })()
         
         
@@ -31,6 +33,9 @@ const AuthRedirect = () =>{
     <div>
     <div>Processing...</div>
     <p>{progressStatus}</p>
+    {successStatus && 
+    <p>Successfully created certificate for discord information</p>
+      }
     </div>
   );
 }
