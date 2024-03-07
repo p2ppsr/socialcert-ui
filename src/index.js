@@ -14,7 +14,7 @@ ReactDOM.render(
     appImages={[
       '/images/startPage.png'
     ]}
-    supportedMetaNet='testnet'
+    supportedMetaNet='mainnet'
   >
     <App />
   </BabbagePrompt>,
