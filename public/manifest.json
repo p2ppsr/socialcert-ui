@@ -16,7 +16,7 @@
     "trust": {
       "name": "SocialCert",
       "note": "Certifies common social accounts, phone, and email",
-      "icon": "https://socialcert.me/favicon.ico", 
+      "icon": "https://staging.socialcert.me/favicon.ico", 
       "publicKey": "02cf6cdf466951d8dfc9e7c9367511d0007ed6fba35ed42d425cc412fd6cfd4a17"
     }
   }
