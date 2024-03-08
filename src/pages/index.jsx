@@ -26,7 +26,7 @@ const Register = () => {
     const hostname = window.location.hostname;
 
     if(hostname.includes("staging")){
-        return window.location.href = "https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=https%3A%2F%2Fstaging.socialcert.net%2F&scope=identify"
+        return window.location.href = "https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=https%3A%2F%2Fstaging.socialcert.net%2Fauthredirect&scope=identify"
     }
 
     else if(hostname.includes("localhost")){
@@ -34,7 +34,7 @@ const Register = () => {
     }
 
     else{
-       return window.location.href = "https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=https%3A%2F%2Fsocialcert.net%2F&scope=identify"
+       return window.location.href = "https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=https%3A%2F%2Fsocialcert.net%2Fauthredirect&scope=identify"
     }
   }
 
