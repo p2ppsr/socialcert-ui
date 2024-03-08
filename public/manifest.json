@@ -1,6 +1,6 @@
 {
-  "short_name": "DiscordCert",
-  "name": "DiscordCert",
+  "short_name": "SocialCert",
+  "name": "SocialCert",
   "icons": [
     {
       "src": "favicon.ico",
@@ -14,9 +14,9 @@
   "background_color": "#ffffff",
   "babbage": {
     "trust": {
-      "name": "DiscordCert",
+      "name": "SocialCert",
       "note": "Certifies discord account information",
-      "icon": "https://identicert.me/favicon.ico", 
+      "icon": "https://socialcert.me/favicon.ico", 
       "publicKey": "02cf6cdf466951d8dfc9e7c9367511d0007ed6fba35ed42d425cc412fd6cfd4a17"
     }
   }

@@ -1,6 +1,6 @@
 {
-  "name": "discordcert-ui",
-  "description": "Discord Certified Identity",
+  "name": "socialcert-ui",
+  "description": "Multi-use account certification",
   "license": "PROPRIETARY",
   "author": "Peer-to-peer Privacy Systems Research, LLC",
   "version": "0.1.0",
