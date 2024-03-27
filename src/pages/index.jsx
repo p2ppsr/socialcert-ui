@@ -123,7 +123,7 @@ const Register = () => {
                           <Grid item>
                             {/* <p>Temporarily Disabled</p> */}
                             
-                            {/*Temoorarily Disabled 
+                   
                              <Button variant='contained' size='large' color='secondary' onClick={handlePhoneClick}
                             style={{
                               color: 'white',
@@ -133,7 +133,7 @@ const Register = () => {
                             > 
                               
                               Certify Phone Number
-                               </Button> */}
+                               </Button>
                           <Button variant='contained' size='large' color='secondary' onClick={handleDiscordClick} 
                           startIcon={<img src="images/discordLogo.png" style={{ width: "1.2em", height: ".95em" }}/> }   
                           style={{
