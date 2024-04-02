@@ -6,7 +6,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babbage/react-prompt": "^0.2.10",
+    "@babbage/react-prompt": "^0.2.16",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.6",
     "@mui/styles": "^5.13.2",
