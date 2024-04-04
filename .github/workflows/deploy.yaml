@@ -9,7 +9,7 @@ env:
   CURRENT_BRANCH: ${{ github.ref_name }}
   GCR_HOST: us.gcr.io
   GOOGLE_PROJECT_ID: babbage-private
-  GCR_IMAGE_NAME: discordcert-ui
+  GCR_IMAGE_NAME: socialcert-ui
 
 jobs:
   build:

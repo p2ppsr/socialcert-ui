@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 import { CssBaseline } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import Register from './pages'
-import Auth from './pages/Auth';
 import AuthRedirect from './pages/AuthRedirect';
+import PhoneRedirect from './pages/PhoneRedirect';
 
 const theme = createTheme({
   palette: {
@@ -31,8 +31,8 @@ const App = () => {
           <div>
             <Routes>
               <Route exact path='/' element={<Register />} />
-               <Route exact path='/Auth' element={<Auth/>}/>
                <Route path="/AuthRedirect" element={<AuthRedirect />} />
+               <Route path="/PhoneRedirect" element={<PhoneRedirect />} />
             </Routes>
           </div>
         </Router>

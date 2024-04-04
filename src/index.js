@@ -6,11 +6,11 @@ import BabbagePrompt from '@babbage/react-prompt'
 ReactDOM.render(
   <BabbagePrompt
     customPrompt
-    appName='DiscordCert'
+    appName='SocialCert'
     author='Project Babbage'
     authorUrl='https://projectbabbage.com'
     description='Babbage Certified Identity'
-    appIcon='/images/identiCertIcon.png'
+    appIcon='/images/socialCertIcon.png'
     appImages={[
       '/images/startPage.png'
     ]}

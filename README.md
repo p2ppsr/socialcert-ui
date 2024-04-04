@@ -1,4 +1,4 @@
-# DiscordCert
+# SocialCert
 Babbage Certified Identity
 
 ## Development Instructions
