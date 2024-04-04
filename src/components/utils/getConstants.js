@@ -1,6 +1,8 @@
 const getConstants = () => {
   let certifierUrl, certifierPublicKey, confederacyUrl
-  const certificateType = '2TgqRC35B1zehGmB21xveZNc7i5iqHc0uxMb+1NMPW4=' // correct
+  const certificateTypes = { discord: '2TgqRC35B1zehGmB21xveZNc7i5iqHc0uxMb+1NMPW4=',
+                              phone: 'mffUklUzxbHr65xLohn0hRL0Tq2GjW1GYF/OPfzqJ6A='
+}// correct
 
   if ((window.location.host.startsWith('staging'))) {
     certifierUrl = 'https://staging-backend.socialcert.net/'
@@ -21,7 +23,7 @@ const getConstants = () => {
   return {
     certifierUrl,
     certifierPublicKey,
-    certificateType,
+    certificateTypes,
     confederacyUrl,
   }
 }

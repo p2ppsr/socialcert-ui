@@ -19,6 +19,7 @@ const PhoneRedirect = ()=>{
     const authrite = new Authrite()                                   // This could also be fixed by removing the enter phone number prompt once a text has been sent
     const signia = new Signia()
     const constants = getConstants()
+    const navigate  = useNavigate();
     signia.config.confederacyHost = constants.confederacyUrl
 
 
@@ -96,7 +97,7 @@ const PhoneRedirect = ()=>{
 
    async function callSignia(data){
         console.log("Inside Call Signia function")
-    await signia.publiclyRevealAttributes({}, constants.certifierUrl, constants.certifierPublicKey, constants.certificateType,
+    await signia.publiclyRevealAttributes({}, constants.certifierUrl, constants.certifierPublicKey, constants.certificateTypes.phone,
         true, {phoneNumber: data.verifiedPhonenumber, verificationType: "phoneNumber"}, async (message)=>{
           setProgressStatus(message)
         })
@@ -104,12 +105,7 @@ const PhoneRedirect = ()=>{
 
         if(!successStatus){
             return(
-              <div className={classes.background}>     
-              <div>Status: </div>
-              <p>{progressStatus}</p>
-              <p>Once your certificate has been succesfully issued you will be redirected to the landing page</p>
-            
-              </div>  
+                navigate('/') 
             );
           }
    }

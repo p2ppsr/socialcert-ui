@@ -26,7 +26,7 @@ const AuthRedirect = () =>{
         const params = new URLSearchParams(window.location.search);
         const code = params.get('code');
         (async ()=>{
-          await signia.publiclyRevealAttributes({}, constants.certifierUrl, constants.certifierPublicKey, constants.certificateType,
+          await signia.publiclyRevealAttributes({}, constants.certifierUrl, constants.certifierPublicKey, constants.certificateTypes.discord,
             true, {accessCode: code, verificationType: "Discord"}, async (message)=>{
               setProgressStatus(message)
             })
