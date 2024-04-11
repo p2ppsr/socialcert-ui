@@ -3,7 +3,7 @@
   "description": "Multi-use account certification",
   "license": "PROPRIETARY",
   "author": "Peer-to-peer Privacy Systems Research, LLC",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "private": true,
   "dependencies": {
     "@babbage/react-prompt": "^0.2.18",
