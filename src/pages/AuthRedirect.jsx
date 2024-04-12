@@ -13,7 +13,6 @@ import useStyles from './register-style'
 
 
 const AuthRedirect = () =>{
-  console.log("Inside AuthRedirect")
   const [progressStatus, setProgressStatus] = useState("")
   const [successStatus, setSuccessStatus] = useState(false)
   const constants = getConstants()

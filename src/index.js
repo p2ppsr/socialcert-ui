@@ -1,22 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import BabbagePrompt from '@babbage/react-prompt'
+//import BabbagePrompt from '@babbage/react-prompt' TODO: ADD BABBAGE PROMPT BACK IN
 
 ReactDOM.render(
-  <BabbagePrompt
-    customPrompt
-    appName='SocialCert'
-    author='Project Babbage'
-    authorUrl='https://projectbabbage.com'
-    description='Babbage Certified Identity'
-    appIcon='/images/socialCertIcon.png'
-    appImages={[
-      '/images/startPage.png'
-    ]}
-    supportedMetaNet='testnet'
-  >
-    <App />
-  </BabbagePrompt>,
+
+    
+    <App />,
   document.getElementById('root')
 )
