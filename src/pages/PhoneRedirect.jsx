@@ -128,7 +128,7 @@ const PhoneRedirect = ()=>{
         
         <button type="submit">Submit</button>
         </form>
-        {!valid && <p>A valid phone number is requird</p>}
+        {!valid && <p>A valid phone number is required</p>}
 
         <form onSubmit={handleVerificationSubmit}>
             <label>

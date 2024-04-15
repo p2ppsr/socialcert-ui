@@ -1,0 +1,73 @@
+@import "./styles/styleVariables.scss";
+
+@font-face {
+  font-family: "Comfortaa";
+  src: url("../src/assets/fonts/Comfortaa-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Noto Sans";
+  src: url("../src/assets/fonts/NotoSans-Medium.ttf");
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background: transparent;
+  font-family: "Comfortaa" system-ui, sans-seriff, arial;
+  background-image: url("'../../assets/images/socialCertBackground.png");
+}
+
+.flex {
+  display: flex;
+  gap: 1rem;
+}
+
+h2 {
+  font-weight: 100;
+}
+
+p {
+  margin-top: 0;
+}
+
+.sub-container {
+  text-align: center;
+  // transform: translateY(-5rem);
+}
+
+.sub-container-2 {
+  text-align: left;
+}
+
+#main-logo {
+  filter: brightness(100);
+}
+
+button {
+  padding: 1rem;
+  border: none;
+  border-radius: $borderRadius;
+  * {
+    margin-inline: 0.5rem;
+  }
+  cursor: pointer;
+}
+
+.blue-button {
+  background: rgb(101, 101, 232);
+}
+
+.green-button {
+  background: rgb(94, 221, 94);
+}
+
+.background-image {
+  z-index: -100;
+  position: absolute;
+  top: 0;
+  left: 0;
+}

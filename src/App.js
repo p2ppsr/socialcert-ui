@@ -5,6 +5,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 import Register from './pages'
 import AuthRedirect from './pages/AuthRedirect';
 import PhoneRedirect from './pages/PhoneRedirect';
+import './App.scss'
 
 const theme = createTheme({
   palette: {
@@ -17,6 +18,9 @@ const theme = createTheme({
     }
   },
   typography: {
+    h1: {
+      color:'blue'
+    },
     button: {
       textTransform: 'none'
     }
