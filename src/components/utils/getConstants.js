@@ -1,7 +1,8 @@
 const getConstants = () => {
   let certifierUrl, certifierPublicKey, confederacyUrl
   const certificateTypes = { discord: '2TgqRC35B1zehGmB21xveZNc7i5iqHc0uxMb+1NMPW4=',
-                              phone: 'mffUklUzxbHr65xLohn0hRL0Tq2GjW1GYF/OPfzqJ6A='
+                              phone: 'mffUklUzxbHr65xLohn0hRL0Tq2GjW1GYF/OPfzqJ6A=',
+                              x: 'vdDWvftf1H+5+ZprUw123kjHlywH+v20aPQTuXgMpNc='
 }// correct
 
   if ((window.location.host.startsWith('staging'))) {
