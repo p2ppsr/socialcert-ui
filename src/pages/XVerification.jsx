@@ -20,7 +20,20 @@ const getUrl = () => { // should move into utils
   }
 }
 
+const getCallbackUrl = () => { // should move into utils
+  const hostname = window.location.hostname
+
+  if (hostname.includes('staging')) {
+    return 'https://staging.socialcert.net/XVerification'
+  } else if (hostname.includes('localhost')) {
+    return 'http://localhost:8088/XVerification'
+  } else {
+    return 'https://socialcert.net/XVerification'
+  }
+}
+
 const XVerification = () => {
+  const callbackUrl = getCallbackUrl();
   const navigate = useNavigate()
   const queryParams = new URLSearchParams(window.location.search)
   const oauthToken = queryParams.get('oauth_token')
@@ -63,7 +76,7 @@ const XVerification = () => {
           })
           .then((response) => response.json())
           .then((data) => {
-            window.location.href = `https://api.twitter.com/oauth/authenticate?oauth_token=${data.requestToken}`
+            window.location.href = `https://api.twitter.com/oauth/authenticate?oauth_callback=${encodeURIComponent(callbackUrl)}&oauth_token=${data.requestToken}`
           })
           .catch(() => {
             console.error('Error in fetch call to make first X request')
