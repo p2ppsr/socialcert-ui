@@ -43,7 +43,7 @@ const PhoneRedirect = ()=>{
         e.preventDefault();
         if(valid){
             const data = {phoneNumber: phoneNumber, funcAction: "sendText"}
-            await authrite.request( getUrl(), { // TODO: make not hardcoded for localhost
+            await authrite.request( getUrl(), { 
              method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -64,8 +64,12 @@ const PhoneRedirect = ()=>{
     }
 
     const handleChange =  (value)=>{
+        const regex = /[a-zA-Z]/;
+        if(!regex.test(value)){
         setPhoneNumber(value);
         setValid(isValidPhoneNumber(value));
+        }
+        else{}
     }
 
     const handleVerificationSubmit = async (e)=>{

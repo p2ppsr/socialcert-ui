@@ -39,7 +39,6 @@ const Register = () => {
   }
 
   const handlePhoneClick = async() =>{
-    console.log("Inside handlePhoneClick")
     navigate('/PhoneRedirect')
 
   }
@@ -122,9 +121,17 @@ const Register = () => {
                         >
                           <Grid item>
                             {/* <p>Temporarily Disabled</p> */}
-                            
+                            <Button variant='contained' size='large' color='secondary' onClick={async() =>{navigate('/XVerification')}}
+                            style={{
+                              color: 'white',
+                              backgroundColor: 'blue',
+                              borderRaduys: '12px'
+                            }}
+                            >
+                              Certify X Account
+                            </Button>
                    
-                             <Button variant='contained' size='large' color='secondary' onClick={handlePhoneClick}
+                             <Button variant='contained' size='large' color='secondary' onClick={async() =>{navigate('/PhoneRedirect')}}
                             style={{
                               color: 'white',
                               backgroundColor: 	'red', 
