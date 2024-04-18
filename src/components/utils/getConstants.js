@@ -1,17 +1,16 @@
 const getConstants = () => {
   let certifierUrl, certifierPublicKey, confederacyUrl
-  const certificateTypes = { discord: '2TgqRC35B1zehGmB21xveZNc7i5iqHc0uxMb+1NMPW4=',
-                              phone: 'mffUklUzxbHr65xLohn0hRL0Tq2GjW1GYF/OPfzqJ6A=',
-                              x: 'vdDWvftf1H+5+ZprUw123kjHlywH+v20aPQTuXgMpNc='
-}// correct
+  const certificateTypes = {
+    discord: '2TgqRC35B1zehGmB21xveZNc7i5iqHc0uxMb+1NMPW4=',
+    phone: 'mffUklUzxbHr65xLohn0hRL0Tq2GjW1GYF/OPfzqJ6A=',
+    x: 'vdDWvftf1H+5+ZprUw123kjHlywH+v20aPQTuXgMpNc='
+  }
 
   if ((window.location.host.startsWith('staging'))) {
     certifierUrl = 'https://staging-backend.socialcert.net/'
     certifierPublicKey = '02cf6cdf466951d8dfc9e7c9367511d0007ed6fba35ed42d425cc412fd6cfd4a17' // correct
     confederacyUrl = 'https://staging-confederacy.babbage.systems'
-  }
-
-  else if (window.location.host.startsWith('localhost')) {
+  } else if (window.location.host.startsWith('localhost')) {
     certifierUrl = 'http://localhost:3002'
     certifierPublicKey = '02cf6cdf466951d8dfc9e7c9367511d0007ed6fba35ed42d425cc412fd6cfd4a17' // correct
     confederacyUrl = 'https://staging-confederacy.babbage.systems'
@@ -25,7 +24,7 @@ const getConstants = () => {
     certifierUrl,
     certifierPublicKey,
     certificateTypes,
-    confederacyUrl,
+    confederacyUrl
   }
 }
 export default getConstants

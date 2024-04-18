@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, Redirect } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import getConstants from '../components/utils/getConstants'
-import { Dialog } from '@mui/material'
 import { Signia } from 'babbage-signia'
-import { toast } from 'react-toastify'
 
 import useStyles from './register-style'
 
-const AuthRedirect = () => {
+const DiscordVerification = () => {
   const [progressStatus, setProgressStatus] = useState('')
   const [successStatus, setSuccessStatus] = useState(false)
   const constants = getConstants()
@@ -49,4 +47,4 @@ const AuthRedirect = () => {
   }
 }
 
-export default AuthRedirect
+export default DiscordVerification
