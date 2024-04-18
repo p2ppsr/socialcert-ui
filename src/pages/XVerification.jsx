@@ -33,7 +33,7 @@ const getCallbackUrl = () => { // should move into utils
 }
 
 const XVerification = () => {
-  const callbackUrl = getCallbackUrl();
+  const callbackUrl = getCallbackUrl()
   const navigate = useNavigate()
   const queryParams = new URLSearchParams(window.location.search)
   const oauthToken = queryParams.get('oauth_token')
@@ -42,6 +42,7 @@ const XVerification = () => {
   useEffect(() => {
     if (oauthToken && oauthVerifier) {
       (async () => {
+        console.log(`CALLBACKURL: ${callbackUrl}`)
         const data = { oauthToken, oauthVerifier, funcAction: 'getUserInfo' }
         await authrite
           .request(getUrl(), {
@@ -76,6 +77,7 @@ const XVerification = () => {
           })
           .then((response) => response.json())
           .then((data) => {
+            console.log(`CALLBACKURL: ${callbackUrl}`)
             window.location.href = `https://api.twitter.com/oauth/authenticate?oauth_callback=${encodeURIComponent(callbackUrl)}&oauth_token=${data.requestToken}`
           })
           .catch(() => {
