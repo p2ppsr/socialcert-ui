@@ -7,10 +7,9 @@ const constants = getConstants()
 const authrite = new Authrite()
 const signia = new Signia()
 signia.config.confederacyHost = constants.confederacyUrl
+const hostname = window.location.hostname
 
 const getUrl = () => { // should move into utils
-  const hostname = window.location.hostname
-
   if (hostname.includes('staging')) {
     return 'https://staging-backend.socialcert.net/handleXVerification'
   } else if (hostname.includes('localhost')) {
@@ -20,21 +19,7 @@ const getUrl = () => { // should move into utils
   }
 }
 
-const getCallbackUrl = () => { // should move into utils
-  const hostname = window.location.hostname
-
-  if (hostname.includes('staging')) {
-    return 'https://staging.socialcert.net/XVerification'
-  } else if (hostname.includes('localhost')) {
-    console.log(`INSIDE GETCALLBACK URL: HOSTNAME: ${hostname}`)
-    return 'http://localhost:8088/XVerification'
-  } else {
-    return 'https://socialcert.net/XVerification'
-  }
-}
-
 const XVerification = () => {
-  const callbackUrl = getCallbackUrl()
   const navigate = useNavigate()
   const queryParams = new URLSearchParams(window.location.search)
   const oauthToken = queryParams.get('oauth_token')
@@ -43,7 +28,6 @@ const XVerification = () => {
   useEffect(() => {
     if (oauthToken && oauthVerifier) {
       (async () => {
-        console.log(`CALLBACKURL: ${callbackUrl}`)
         const data = { oauthToken, oauthVerifier, funcAction: 'getUserInfo' }
         await authrite
           .request(getUrl(), {
@@ -67,7 +51,7 @@ const XVerification = () => {
       })()
     } else {
       (async () => {
-        const data = { funcAction: 'makeRequest' } // Sending initial request to backend to get the request token
+        const data = { funcAction: 'makeRequest', hostURL: hostname } // Sending initial request to backend to get the request token
         await authrite
           .request(getUrl(), {
             method: 'POST',
@@ -78,8 +62,7 @@ const XVerification = () => {
           })
           .then((response) => response.json())
           .then((data) => {
-            console.log(`CALLBACKURL: ${callbackUrl}`)
-            window.location.href = `https://api.twitter.com/oauth/authenticate?oauth_callback=${encodeURIComponent('https://staging.socialcert.net/XVerification')}&oauth_token=${data.requestToken}`
+            window.location.href = `https://api.twitter.com/oauth/authenticate?oauth_token=${data.requestToken}`
           })
           .catch(() => {
             console.error('Error in fetch call to make first X request')
