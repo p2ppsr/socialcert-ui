@@ -26,6 +26,7 @@ const getCallbackUrl = () => { // should move into utils
   if (hostname.includes('staging')) {
     return 'https://staging.socialcert.net/XVerification'
   } else if (hostname.includes('localhost')) {
+    console.log(`INSIDE GETCALLBACK URL: HOSTNAME: ${hostname}`)
     return 'http://localhost:8088/XVerification'
   } else {
     return 'https://socialcert.net/XVerification'
@@ -78,7 +79,7 @@ const XVerification = () => {
           .then((response) => response.json())
           .then((data) => {
             console.log(`CALLBACKURL: ${callbackUrl}`)
-            window.location.href = `https://api.twitter.com/oauth/authenticate?oauth_callback=${encodeURIComponent(callbackUrl)}&oauth_token=${data.requestToken}`
+            window.location.href = `https://api.twitter.com/oauth/authenticate?oauth_callback=${encodeURIComponent('https://staging.socialcert.net/XVerification')}&oauth_token=${data.requestToken}`
           })
           .catch(() => {
             console.error('Error in fetch call to make first X request')
