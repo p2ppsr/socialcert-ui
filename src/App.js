@@ -6,6 +6,7 @@ import Register from './pages'
 import DiscordVerification from './pages/discordVerification'
 import PhoneRedirect from './pages/PhoneRedirect'
 import XVerification from './pages/XVerification'
+import EmailVerification from './pages/emailVerification'
 
 const theme = createTheme({
   palette: {
@@ -35,6 +36,7 @@ const App = () => {
               <Route path='/discordVerification' element={<DiscordVerification />} />
               <Route path='/PhoneRedirect' element={<PhoneRedirect />} />
               <Route path='/XVerification' element={<XVerification />} />
+              <Route path='/emailVerification' element={<EmailVerification />} />
             </Routes>
           </div>
         </Router>

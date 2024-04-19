@@ -75,7 +75,7 @@ const Register = () => {
             ? <div>
               <Typography>{progressStatus}</Typography>
               <LinearProgress color='secondary' />
-              </div>
+            </div>
             : (
               <Grid item container className={classes.form}>
                 {success
@@ -113,6 +113,16 @@ const Register = () => {
                         >
                           <Grid item>
                             {/* <p>Temporarily Disabled</p> */}
+                            <Button
+                              variant='contained' size='large' color='secondary' onClick={async () => { navigate('/emailVerification') }}
+                              style={{
+                                color: 'white',
+                                backgroundColor: 'green',
+                                borderRaduys: '12px'
+                              }}
+                            >
+                              Certify Email
+                            </Button>
                             <Button
                               variant='contained' size='large' color='secondary' onClick={async () => { navigate('/XVerification') }}
                               style={{
