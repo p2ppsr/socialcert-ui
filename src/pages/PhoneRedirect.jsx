@@ -77,8 +77,11 @@ const PhoneRedirect = () => {
       })
         .then(response => response.json())
         .then(data => {
-          console.log(data)
-          callSignia(data)
+          if (data.verificationStatus) {
+            callSignia(data)
+          } else {
+            // User entered incorrect code either show not verified screen or do nothing
+          }
         })
         .catch(error => {
           console.log(error)
@@ -89,6 +92,7 @@ const PhoneRedirect = () => {
 
   async function callSignia (data) {
     console.log('Inside Call Signia function')
+    console.log(`${data.verifiedPhonenumber}`)
     await signia.publiclyRevealAttributes({}, constants.certifierUrl, constants.certifierPublicKey, constants.certificateTypes.phone,
       true, { phoneNumber: data.verifiedPhonenumber, verificationType: 'phoneNumber' }, async (message) => {
         setProgressStatus(message)

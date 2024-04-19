@@ -7,8 +7,10 @@ import { useNavigate } from 'react-router-dom'
 const EmailVerification = () => {
   const [email, setEmail] = useState('')
   const [valid, setValid] = useState(true)
+  const [verificationCode, setVerificationCode] = useState('')
   const [emailSentStatus, setEmailSentStatus] = useState(false)
   const [sentEmail, setSentEmail] = useState('')
+  const [successStatus, setSuccessStatus] = useState(false)
   const authrite = new Authrite() // This could also be fixed by removing the enter phone number prompt once a text has been sent
   const signia = new Signia()
   const constants = getConstants()
@@ -19,16 +21,20 @@ const EmailVerification = () => {
     const hostname = window.location.hostname
 
     if (hostname.includes('staging')) {
-      return 'https://staging-backend.socialcert.net/emailVerification'
+      return 'https://staging-backend.socialcert.net/handleEmailVerification'
     } else if (hostname.includes('localhost')) {
-      return ('http://localhost:3002/emailVerification')
+      return ('http://localhost:3002/handleEmailVerification')
     } else {
-      return 'https://backend.socialcert.net/emailVerification'
+      return 'https://backend.socialcert.net/handleEmailVerification'
     }
   }
 
   const handleEmailChange = (e) => {
-    setEmail(e.target.value) // Update the email state with the new value
+    setEmail(e.target.value)
+  }
+
+  const handleVerificationChange = (e) => {
+    setVerificationCode(e.target.value)
   }
 
   const handleEmailSubmit = async (e) => {
@@ -47,9 +53,11 @@ const EmailVerification = () => {
       })
         .then(response => response.json())
         .then(data => {
-          setEmailSentStatus(data.emailtSentStatus)
-          setSentEmail(data.textSentPhonenumber)
-          console.log(`RETURNED DATA FROM SENDING TEXT ${data}`)
+          setEmailSentStatus(data.emailSentStatus)
+          setSentEmail(data.sentEmail)
+          console.log(data.sentEmail)
+          console.log(data.emailSentStatus)
+          console.log(`RETURNED DATA FROM SENDING TEXT ${data.json}`)
         })
         .catch(error => {
           console.log(error)
@@ -57,6 +65,47 @@ const EmailVerification = () => {
         })
     } else {
       setValid(false)
+    }
+  }
+
+  const handleVerificationSubmit = async (e) => {
+    e.preventDefault()
+    if (emailSentStatus === true) {
+      const data = { verifyEmail: sentEmail, verificationCode, funcAction: 'verifyCode' }
+      await authrite.request(getUrl(), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.verificationStatus === true) {
+            callSignia(data)
+          } else {
+            // TODO: Add some sort of handling to communicate to the user they entered in the wrong code
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          console.error('Error in handling verification of text code')
+        })
+    }
+  }
+
+  async function callSignia (data) {
+    console.log('Inside Call Signia function')
+    console.log(sentEmail)
+    await signia.publiclyRevealAttributes({}, constants.certifierUrl, constants.certifierPublicKey, constants.certificateTypes.email,
+      true, { email: sentEmail, verificationType: 'email' }, async (message) => {
+      })
+    setSuccessStatus(true)
+
+    if (!successStatus) {
+      return (
+        navigate('/')
+      )
     }
   }
 
@@ -74,6 +123,19 @@ const EmailVerification = () => {
         <button type='submit'>Send Email</button>
       </form>
       {!valid && <p>A valid email is requird</p>}
+
+      <form onSubmit={handleVerificationSubmit}>
+        <label>
+          Verification Code:
+          <input
+            type='text' name='verificationField'
+            value={verificationCode}
+            onChange={handleVerificationChange}
+          />
+        </label>
+        <button type='submit'>Verify Email</button>
+      </form>
+
     </div>
   )
 }

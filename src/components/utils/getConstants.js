@@ -3,7 +3,8 @@ const getConstants = () => {
   const certificateTypes = {
     discord: '2TgqRC35B1zehGmB21xveZNc7i5iqHc0uxMb+1NMPW4=',
     phone: 'mffUklUzxbHr65xLohn0hRL0Tq2GjW1GYF/OPfzqJ6A=',
-    x: 'vdDWvftf1H+5+ZprUw123kjHlywH+v20aPQTuXgMpNc='
+    x: 'vdDWvftf1H+5+ZprUw123kjHlywH+v20aPQTuXgMpNc=',
+    email: 'exOl3KM0dIJ04EW5pZgbZmPag6MdJXd3/a1enmUU/BA='
   }
 
   if ((window.location.host.startsWith('staging'))) {
