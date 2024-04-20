@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import 'react-phone-number-input/style.css'
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input'
 
@@ -7,19 +7,30 @@ import { Signia } from 'babbage-signia'
 import getConstants from '../components/utils/getConstants'
 import { useNavigate } from 'react-router-dom'
 
-const PhoneRedirect = () => {
+const PhoneVerification = () => {
   const [valid, setValid] = useState(true)
   const [phoneNumber, setPhoneNumber] = useState('')
   const [verificationCode, setVerificationCode] = useState('')
   const [textSentStatus, setTextSentStatus] = useState(false)
-  const [textSentPhonenumber, setTextSentPhonenumber] = useState('')// Makes sure user doesn't put in different phonenumber in submission box causing verification code to be messed up
-  const [progressStatus, setProgressStatus] = useState('')
+  const [textSentPhonenumber, setTextSentPhonenumber] = useState('')
   const [successStatus, setSuccessStatus] = useState(false)
-  const authrite = new Authrite() // This could also be fixed by removing the enter phone number prompt once a text has been sent
+  const [verificationAttempts, setVerificationAttempts] = useState(5)
+  const [locked, setLocked] = useState(false)
+  const [verificationSubmitted, setVerificationSubmitted] = useState(false) // New state variable
+  const authrite = new Authrite()
   const signia = new Signia()
   const constants = getConstants()
   const navigate = useNavigate()
   signia.config.confederacyHost = constants.confederacyUrl
+
+  useEffect(() => {
+    if (locked) {
+      setTimeout(() => {
+        setLocked(false)
+        setVerificationAttempts(5)
+      }, 600000) // Unlock after 10 minutes
+    }
+  }, [locked])
 
   function getUrl () {
     const hostname = window.location.hostname
@@ -66,7 +77,8 @@ const PhoneRedirect = () => {
 
   const handleVerificationSubmit = async (e) => {
     e.preventDefault()
-    if (textSentStatus === true) {
+    if (textSentStatus === true && locked === false) {
+      setVerificationSubmitted(true)
       const data = { phoneNumber: textSentPhonenumber, verificationCode, funcAction: 'verifyCode' }
       await authrite.request(getUrl(), {
         method: 'POST',
@@ -80,7 +92,10 @@ const PhoneRedirect = () => {
           if (data.verificationStatus) {
             callSignia(data)
           } else {
-            // User entered incorrect code either show not verified screen or do nothing
+            if (verificationAttempts === 1) {
+              setLocked(true)
+            }
+            setVerificationAttempts(verificationAttempts - 1)
           }
         })
         .catch(error => {
@@ -95,7 +110,6 @@ const PhoneRedirect = () => {
     console.log(`${data.verifiedPhonenumber}`)
     await signia.publiclyRevealAttributes({}, constants.certifierUrl, constants.certifierPublicKey, constants.certificateTypes.phone,
       true, { phoneNumber: data.verifiedPhonenumber, verificationType: 'phoneNumber' }, async (message) => {
-        setProgressStatus(message)
       })
     setSuccessStatus(true)
 
@@ -137,10 +151,11 @@ const PhoneRedirect = () => {
         </label>
         <button type='submit'>Submit Verification Code</button>
       </form>
-
+      {verificationSubmitted && locked && <p>You must wait 10 minutes before trying again.</p>}
+      {verificationSubmitted && !locked && <p>Remaining attempts until lock out: {verificationAttempts}</p>}
     </div>
 
   )
 }
 
-export default PhoneRedirect
+export default PhoneVerification

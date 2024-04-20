@@ -6,7 +6,6 @@ import {
 } from '@mui/material'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
@@ -29,10 +28,6 @@ const Register = () => {
     } else {
       return window.location.href = 'https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=https%3A%2F%2Fsocialcert.net%2FdiscordVerification&scope=identify'
     }
-  }
-
-  const handlePhoneClick = async () => {
-    navigate('/PhoneRedirect')
   }
 
   return (
@@ -135,7 +130,7 @@ const Register = () => {
                             </Button>
 
                             <Button
-                              variant='contained' size='large' color='secondary' onClick={async () => { navigate('/PhoneRedirect') }}
+                              variant='contained' size='large' color='secondary' onClick={async () => { navigate('/phoneVerification') }}
                               style={{
                                 color: 'white',
                                 backgroundColor: 'red',

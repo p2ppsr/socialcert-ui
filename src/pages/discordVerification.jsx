@@ -38,12 +38,6 @@ const DiscordVerification = () => {
   } else {
     navigate('/')
     return null
-
-    // return (
-    // <div>
-    // <p>Successfully created certificate for discord information</p>
-    // </div>
-  // );
   }
 }
 

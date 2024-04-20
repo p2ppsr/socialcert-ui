@@ -4,7 +4,7 @@ import { CssBaseline } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import Register from './pages'
 import DiscordVerification from './pages/discordVerification'
-import PhoneRedirect from './pages/PhoneRedirect'
+import PhoneVerification from './pages/phoneVerification'
 import XVerification from './pages/XVerification'
 import EmailVerification from './pages/emailVerification'
 
@@ -34,7 +34,7 @@ const App = () => {
             <Routes>
               <Route exact path='/' element={<Register />} />
               <Route path='/discordVerification' element={<DiscordVerification />} />
-              <Route path='/PhoneRedirect' element={<PhoneRedirect />} />
+              <Route path='/phoneVerification' element={<PhoneVerification />} />
               <Route path='/XVerification' element={<XVerification />} />
               <Route path='/emailVerification' element={<EmailVerification />} />
             </Routes>
