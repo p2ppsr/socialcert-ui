@@ -2,11 +2,19 @@ import React, { useState } from 'react'
 import useStyles from './register-style'
 import Verify from '../components/Verify'
 import {
-  Container, Typography, Grid, Paper, Button, LinearProgress
+  Container,
+  Typography,
+  Grid,
+  Paper,
+  Button,
+  LinearProgress
 } from '@mui/material'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import { useNavigate } from 'react-router-dom'
+import socialCertLogo from '../assets/images/socialCert.svg'
+import { FaPhoneAlt, FaDiscord } from 'react-icons/fa'
 
 const Register = () => {
   const navigate = useNavigate()
@@ -30,137 +38,61 @@ const Register = () => {
     }
   }
 
+  const handlePhoneClick = async () => {
+    navigate('/phoneVerification')
+  }
+
   return (
-    <div className={classes.background}>
-      <header>
-        <Grid item container justify='flex-end' className={classes.title}>
-          <img src='images/socialCertBanner.png' className={classes.logo} />
-        </Grid>
-      </header>
-      <Container
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: '0.3fr auto 0.3fr'
-        }}
-      >
-        <Grid
-          container direction='column' sx={{
-            display: 'grid',
-            gridColumn: '2',
-            textAlign: 'center'
+    <div className='container'>
+      <div className='sub-container'>
+        <div className='sub-container-2'>
+          <h2 style={{ margin: 0 }}>Welcome to</h2>
+          <img
+            src={socialCertLogo}
+            width={300}
+            id='main-logo'
+            className='button'
+          />
+        </div>
+      </div>
+      <p style={{ marginBottom: '3rem' }}>
+        Access the MetaNet using your own certified identity{' '}
+      </p>
+
+      <h3>Choose your desired identity certification</h3>
+      <div className='flex button-group'>
+        <button
+          className='green-button'
+          onClick={() => {
+            console.log('phone click')
+            handlePhoneClick()
           }}
         >
-          <Verify
-            openVerify={openVerify}
-            setOpenVerify={setOpenVerify}
-            setVerifyStatus={setVerifyStatus}
-            setLoading={setLoading}
-            setInquiryId={setInquiryId}
-            setSuccess={setSuccess}
-            setProgressStatus={setProgressStatus}
-          />
+          <div>
+            <FaPhoneAlt style={{ transform: 'translateY(20%)' }} />
+            <label>Phone Number</label>
+          </div>
+        </button>
+        <button className='blue-button' onClick={handleDiscordClick}>
+          <FaDiscord />
+          <label>Discord</label>
+        </button>
 
-          {/* <Grid item className={classes.title}>
-            <Typography variant='h1'>
-              Who Are You?
-            </Typography>
-          </Grid> */}
-          <ToastContainer />
-          {loading
-            ? <div>
-              <Typography>{progressStatus}</Typography>
-              <LinearProgress color='secondary' />
-            </div>
-            : (
-              <Grid item container className={classes.form}>
-                {success
-                  ? (
-                    <Paper
-                      elevation={0} sx={{
-                        display: 'grid',
-                        width: '-webkit-fill-available',
-                        alignItems: 'center',
-                        height: '26em'
-                      }}
-                    >
-                      <Grid item justifyContent='center'>
-                        <Typography variant='h7'>
-                          Successfully registered! 🎉
-                        </Typography>
-                      </Grid>
-                    </Paper>
-                    )
-                  : (
-                    <Paper
-                      elevation={0} sx={{
-                        display: 'grid',
-                        width: '-webkit-fill-available',
-                        alignItems: 'center',
-                        height: '26em',
-                        backgroundColor: 'transparent'
-                      }}
-                    >
-                      <Grid item container direction='column' align='center' padding='5px'>
-                        <Grid
-                          item container sx={{
-                            justifyContent: 'center'
-                          }}
-                        >
-                          <Grid item>
-                            {/* <p>Temporarily Disabled</p> */}
-                            <Button
-                              variant='contained' size='large' color='secondary' onClick={async () => { navigate('/emailVerification') }}
-                              style={{
-                                color: 'white',
-                                backgroundColor: 'green',
-                                borderRaduys: '12px'
-                              }}
-                            >
-                              Certify Email
-                            </Button>
-                            <Button
-                              variant='contained' size='large' color='secondary' onClick={async () => { navigate('/XVerification') }}
-                              style={{
-                                color: 'white',
-                                backgroundColor: 'blue',
-                                borderRaduys: '12px'
-                              }}
-                            >
-                              Certify X Account
-                            </Button>
+        <button onClick={() => {
+          navigate('/XVerification')
+        }}
+        >
+          XCert
+        </button>
 
-                            <Button
-                              variant='contained' size='large' color='secondary' onClick={async () => { navigate('/phoneVerification') }}
-                              style={{
-                                color: 'white',
-                                backgroundColor: 'red',
-                                borderRadius: '12px'
-                              }}
-                            >
+        <button onClick={() => {
+          navigate('/emailVerification')
+        }}
+        >
+          Email Cert
+        </button>
 
-                              Certify Phone Number
-                            </Button>
-                            <Button
-                              variant='contained' size='large' color='secondary' onClick={handleDiscordClick}
-                              startIcon={<img src='images/discordLogo.png' style={{ width: '1.2em', height: '.95em' }} />}
-                              style={{
-                                color: 'white',
-                                backgroundColor: '#7289da',
-                                borderRadius: '12px'
-                              }}
-                            >
-
-                              Certify Discord Account
-                            </Button>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Paper>
-                    )}
-              </Grid>
-              )}
-        </Grid>
-      </Container>
+      </div>
     </div>
   )
 }

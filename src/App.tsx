@@ -7,6 +7,8 @@ import DiscordVerification from './pages/discordVerification'
 import PhoneVerification from './pages/phoneVerification'
 import XVerification from './pages/XVerification'
 import EmailVerification from './pages/emailVerification'
+import './App.scss'
+import socialCertBackgroundImage from './assets/images/socialCertBackground.png'
 
 const theme = createTheme({
   palette: {
@@ -31,8 +33,9 @@ const App = () => {
       <CssBaseline>
         <Router>
           <div>
+            <img src={socialCertBackgroundImage} className='background-image' />
             <Routes>
-              <Route exact path='/' element={<Register />} />
+              <Route path='/' element={<Register />} />
               <Route path='/discordVerification' element={<DiscordVerification />} />
               <Route path='/phoneVerification' element={<PhoneVerification />} />
               <Route path='/XVerification' element={<XVerification />} />
