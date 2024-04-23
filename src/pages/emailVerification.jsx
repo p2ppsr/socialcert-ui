@@ -141,7 +141,6 @@ const EmailVerification = () => {
         <button type='submit'>Send Email</button>
       </form>
       {!valid && <p>A valid email is required</p>}
-
       <form onSubmit={handleVerificationSubmit}>
         <label>
           Verification Code:
