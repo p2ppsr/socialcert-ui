@@ -47,39 +47,60 @@ p {
 }
 
 .button-group {
-  width: 50%;
+  width: 67%;
+  display: flex;
+  flex-wrap: wrap; // Allow buttons to wrap onto the next line if necessary
+  justify-content: center; // Center the buttons for better aesthetics
+  gap: 1rem; // Maintain spacing between buttons on wrap
 }
 
 button {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.5rem;
-  padding-inline: 1rem;
+  align-items: center; // Ensures vertical alignment of all items inside the button
+  justify-content: center; // Centers items horizontally
+  flex: 1 1 180px; // Flex-grow, flex-shrink and flex-basis set to ensure buttons expand, but also have a minimum width
+  max-width: 200px; // Optional: You can set a max-width to ensure buttons don't get too large on bigger screens
+  padding: 0.5rem 1rem; // Provide internal spacing
   border: 1px solid white;
   border-radius: $borderRadius;
   color: white;
-  width:100%;
-  * {
-    margin-inline: 0.25rem;
-  }
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); // Default background to differentiate if individual styles fail
   cursor: pointer;
+  text-align: center; // Aligns the text to the center if the icon size varies
+  gap: 0.5rem; // Space between the icon and the label
 
-  transition: 0.2s ease;
   &:hover {
     box-shadow: 0.15rem 0.15rem white;
   }
-}
 
-.blue-button {
-  background: rgb(51, 73, 189);
-  *{
-    transform: translateX(-10%);
+  label {
+    margin: 0; // Remove margin to align text correctly with the icon
+  }
+
+  svg {
+    vertical-align: middle;
   }
 }
 
-.green-button {
-  background: rgb(49, 147, 83);
+#discord-cert-button {
+  background-color: rgb(51, 73, 189);
+}
+
+#phone-cert-button {
+  background-color: rgb(49, 147, 83);
+}
+
+#x-cert-button {
+  background-color: black;
+}
+
+#email-cert-button {
+  background-color: rgb(60, 120, 235);
 }
 
 .background-image {
