@@ -5,14 +5,20 @@ import BabbagePrompt from '@babbage/react-prompt'
 
 ReactDOM.render(
   <BabbagePrompt
-    customPrompt
+    // customPrompt
     appName='SocialCert'
     author='Project Babbage'
     authorUrl='https://projectbabbage.com'
     description='Babbage Certified Identity'
-    appIcon='/images/socialCertIcon.png'
+    appIcon={{
+      mainnet: '/images/socialCertIcon.png',
+      testnet: '/images/socialCertIcon.png'
+    }}
     appImages={[
-      '/images/startPage.png'
+      {
+        mainnet: '/images/socialCertIcon.png',
+        testnet: '/images/socialCertIcon.png'
+      }
     ]}
     supportedMetaNet='mainnet'
   >
