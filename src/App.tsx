@@ -1,14 +1,14 @@
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { CssBaseline } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import Register from './pages'
-import DiscordVerification from './pages/discordVerification'
-import PhoneVerification from './pages/phoneVerification'
-import XVerification from './pages/XVerification'
-import EmailVerification from './pages/emailVerification'
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import './App.scss'
 import socialCertBackgroundImage from './assets/images/socialCertBackground.png'
+import DiscordVerification from './pages/DiscordVerification'
+import EmailVerification from './pages/EmailVerification'
+import EnterPhoneCode from "./pages/PhoneVerification/EnterPhoneCode/EnterPhoneCode"
+import PhoneVerification from './pages/PhoneVerification/PhoneVerification'
+import Register from './pages/Register'
+import XVerification from './pages/XVerification'
 
 const theme = createTheme({
   palette: {
@@ -33,13 +33,14 @@ const App = () => {
       <CssBaseline>
         <Router>
           <div>
-            <img src={socialCertBackgroundImage} className='background-image' />
+            <img src={socialCertBackgroundImage} id='background-image' />
             <Routes>
               <Route path='/' element={<Register />} />
-              <Route path='/discordVerification' element={<DiscordVerification />} />
-              <Route path='/phoneVerification' element={<PhoneVerification />} />
+              <Route path='/DiscordVerification' element={<DiscordVerification />} />
+              <Route path='/PhoneVerification' element={<PhoneVerification />} />
+              <Route path='/PhoneVerification/EnterPhoneCode' element={<EnterPhoneCode />} />
               <Route path='/XVerification' element={<XVerification />} />
-              <Route path='/emailVerification' element={<EmailVerification />} />
+              <Route path='/EmailVerification' element={<EmailVerification />} />
             </Routes>
           </div>
         </Router>

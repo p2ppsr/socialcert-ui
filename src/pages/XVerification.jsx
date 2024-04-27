@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Authrite } from 'authrite-js'
 import { Signia } from 'babbage-signia'
-import getConstants from '../components/utils/getConstants'
+import getConstants from '../utils/getConstants'
 import { useNavigate } from 'react-router-dom'
 const constants = getConstants()
 const authrite = new Authrite()
@@ -72,7 +72,7 @@ const XVerification = () => {
   }, [])
 
   return (
-    <p>test landing page</p>
+    <p>X verification page</p>
   )
 }
 

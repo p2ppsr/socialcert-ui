@@ -4,7 +4,7 @@ import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input'
 
 import { Authrite } from 'authrite-js'
 import { Signia } from 'babbage-signia'
-import getConstants from '../components/utils/getConstants'
+import getConstants from '../../utils/getConstants'
 import { useNavigate } from 'react-router-dom'
 
 const PhoneVerification = () => {
@@ -44,7 +44,7 @@ const PhoneVerification = () => {
     }
   }
 
-  const handlePhoneNumberSubmit = async (e) => {
+  const handlePhoneNumberSubmit = async (e: any) => {
     e.preventDefault()
     if (valid) {
       const data = { phoneNumber, funcAction: 'sendText' }
@@ -67,7 +67,7 @@ const PhoneVerification = () => {
     }
   }
 
-  const handleChange = (value) => {
+  const handleChange = (value: string) => {
     const regex = /[a-zA-Z]/
     if (!regex.test(value)) {
       setPhoneNumber(value)
@@ -75,7 +75,7 @@ const PhoneVerification = () => {
     }
   }
 
-  const handleVerificationSubmit = async (e) => {
+  const handleVerificationSubmit = async (e: any) => {
     e.preventDefault()
     if (textSentStatus === true && locked === false) {
       setVerificationSubmitted(true)
@@ -105,7 +105,7 @@ const PhoneVerification = () => {
     }
   }
 
-  async function callSignia (data) {
+  async function callSignia (data: any) {
     console.log('Inside Call Signia function')
     console.log(`${data.verifiedPhonenumber}`)
     await signia.publiclyRevealAttributes({}, constants.certifierUrl, constants.certifierPublicKey, constants.certificateTypes.phone,
@@ -120,7 +120,7 @@ const PhoneVerification = () => {
     }
   }
 
-  const handleVerificationChange = (e) => {
+  const handleVerificationChange = (e: any) => {
     setVerificationCode(e.target.value)
   }
 

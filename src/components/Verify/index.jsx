@@ -1,5 +1,5 @@
 import React from 'react'
-import getConstants from '../utils/getConstants'
+import getConstants from '../../utils/getConstants'
 import './ipersona.css'
 import { Dialog } from '@mui/material'
 import Persona from 'persona'

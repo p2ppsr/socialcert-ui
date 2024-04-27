@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import getConstants from '../components/utils/getConstants'
+import getConstants from '../utils/getConstants'
 import { Signia } from 'babbage-signia'
 
 import useStyles from './register-style'

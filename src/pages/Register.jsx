@@ -18,8 +18,7 @@ import { useNavigate } from "react-router-dom"
 import socialCertLogo from "../assets/images/socialCert.svg"
 import { FaPhoneAlt, FaDiscord } from "react-icons/fa"
 import { FaXTwitter } from "react-icons/fa6"
-import { IoIosMail } from "react-icons/io";
-
+import { IoIosMail } from "react-icons/io"
 
 const Register = () => {
   const navigate = useNavigate()
@@ -47,7 +46,7 @@ const Register = () => {
   }
 
   const handlePhoneClick = async () => {
-    navigate("/phoneVerification")
+    navigate("/PhoneVerification")
   }
 
   return (
@@ -58,12 +57,11 @@ const Register = () => {
           <img
             src={socialCertLogo}
             width={300}
-            id="main-logo"
-            className="button"
+            className="main-logo"
           />
         </div>
       </div>
-      <p style={{ marginBottom: "3rem" }}>
+      <p style={{ marginBottom: "2rem" }}>
         Access the MetaNet using your own certified identity{" "}
       </p>
 
@@ -95,7 +93,7 @@ const Register = () => {
             navigate("/emailVerification")
           }}
         >
-          <IoIosMail/>
+          <IoIosMail />
           Email
         </button>
       </div>
