@@ -1,5 +1,5 @@
 import socialCertLogo from "../../../assets/images/socialCert.svg"
-import GoBackButton from "../../../components/GoBackButton"
+import GoBackButton from "../../../components/NavigateButton"
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner"
 import { Signia } from "babbage-signia"
 import getConstants from "../../../utils/getConstants"
@@ -12,6 +12,7 @@ import { formatPhoneNumber } from "react-phone-number-input"
 
 import "./EnterPhoneCode.scss"
 import { sendVerificationText } from "../utils/phoneUtils"
+import NavigateButton from "../../../components/NavigateButton"
 
 const EnterPhoneCode = () => {
   // Constructors ============================================================
@@ -120,16 +121,18 @@ const EnterPhoneCode = () => {
       }
 
       // Verification has succeeded, navigate to result page with success params
+      navigate("/PhoneVerification/VerifyResult/success")
     } catch (error) {
       console.error("Error in handling verification of text code", error)
       // Verification failed, navigate to result page with error params
+      navigate("/PhoneVerification/VerifyResult/error")
     }
   }
 
   // Effects =============================================================
 
   // Return user to phone verification if no phone number has been provided
-  // TODO: UNCOMMENT AFTER DEV
+  // TODO: Commented out for dev purposes
   // useEffect(() => {
   //   if (!textSentPhonenumber) {
   //     navigate("/PhoneVerification")
@@ -206,9 +209,10 @@ const EnterPhoneCode = () => {
 
       <p style={{ margin: "0" }}>Wrong number?</p>
 
-      <GoBackButton
+      <NavigateButton
         navigatePath="/PhoneVerification"
         style={{ marginTop: "1rem" }}
+        label={"Go back"}
       />
     </div>
   )

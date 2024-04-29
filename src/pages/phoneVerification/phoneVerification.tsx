@@ -10,10 +10,11 @@ import getConstants from "../../utils/getConstants"
 
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
 import "./PhoneVerification.scss"
-import GoBackButton from "../../components/GoBackButton"
+import GoBackButton from "../../components/NavigateButton"
 import { usePhoneStore } from "../../stores/stores"
 import { getBackendUrl } from "../../utils/getBackendUrl"
 import { sendVerificationText } from "./utils/phoneUtils"
+import NavigateButton from "../../components/NavigateButton"
 
 const PhoneVerification = () => {
   // Constructors ===========================================================
@@ -166,7 +167,7 @@ const PhoneVerification = () => {
         </>
       )} */}
 
-      <GoBackButton navigatePath="/" />
+      <NavigateButton navigatePath="/" label={"Go back"} />
     </div>
   )
 }

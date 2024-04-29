@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom"
 interface GoBackButtonProps {
   navigatePath: string
   style?: Object
+  label: string
 }
 
 // Requires the full path of the page desired to return to: eg: '/' or '/PhoneVerification'
-const GoBackButton = ({ navigatePath, style }: GoBackButtonProps) => {
+const NavigateButton = ({ navigatePath, style, label }: GoBackButtonProps) => {
   const navigate = useNavigate()
   return (
     <div style={style}>
@@ -28,10 +29,10 @@ const GoBackButton = ({ navigatePath, style }: GoBackButtonProps) => {
             fill="white"
           />
         </svg>
-        Go back
+        {label}
       </button>
     </div>
   )
 }
 
-export default GoBackButton
+export default NavigateButton

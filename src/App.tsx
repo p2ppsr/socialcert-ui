@@ -9,6 +9,7 @@ import EnterPhoneCode from "./pages/PhoneVerification/EnterPhoneCode/EnterPhoneC
 import PhoneVerification from './pages/PhoneVerification/PhoneVerification'
 import Register from './pages/Register'
 import XVerification from './pages/XVerification'
+import VerifyResult from "./pages/PhoneVerification/VerifyResult/VerifyResult"
 
 const theme = createTheme({
   palette: {
@@ -39,6 +40,7 @@ const App = () => {
               <Route path='/DiscordVerification' element={<DiscordVerification />} />
               <Route path='/PhoneVerification' element={<PhoneVerification />} />
               <Route path='/PhoneVerification/EnterPhoneCode' element={<EnterPhoneCode />} />
+              <Route path='/PhoneVerification/VerifyResult/:status' element={<VerifyResult/>} />
               <Route path='/XVerification' element={<XVerification />} />
               <Route path='/EmailVerification' element={<EmailVerification />} />
             </Routes>
