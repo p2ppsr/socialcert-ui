@@ -31,7 +31,7 @@ const DiscordVerification = () => {
       <div className={classes.background}>
         <div>Status: </div>
         <p>{progressStatus}</p>
-        <p>Once your certificate has been succesfully issued you will be redirected to the landing page</p>
+        <p>Once your certificate has been successfully issued you will be redirected to the landing page</p>
 
       </div>
     )

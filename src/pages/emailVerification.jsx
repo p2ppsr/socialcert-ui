@@ -32,6 +32,7 @@ const EmailVerification = () => {
   function getUrl() {
     const hostname = window.location.hostname
 
+    // NOTE: This assumes when you run the UI locally, you also are running the backend locally!!
     if (hostname.includes('staging')) {
       return 'https://staging-backend.socialcert.net/handleEmailVerification'
     } else if (hostname.includes('localhost')) {
@@ -69,7 +70,7 @@ const EmailVerification = () => {
           setSentEmail(data.sentEmail)
         })
         .catch((error) => {
-          console.error('Error in fetch call to phone verification occurred:', error)
+          console.error('Error in fetch call to email verification occurred:', error)
         })
     } else {
       setValid(false)
@@ -114,7 +115,9 @@ const EmailVerification = () => {
       constants.certificateTypes.email,
       true,
       { email: sentEmail, verificationType: 'email' },
-      async (message) => { }
+      async (message) => {
+        console.log('status:', message)
+      }
     )
     setSuccessStatus(true)
 
