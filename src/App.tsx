@@ -3,13 +3,13 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import './App.scss'
 import socialCertBackgroundImage from './assets/images/socialCertBackground.png'
-import DiscordVerification from './pages/DiscordVerification'
-import EmailVerification from './pages/EmailVerification'
-import EnterPhoneCode from "./pages/PhoneVerification/EnterPhoneCode/EnterPhoneCode"
-import PhoneVerification from './pages/PhoneVerification/PhoneVerification'
+import DiscordVerification from './pages/discordVerification'
+import EmailVerification from './pages/emailVerification'
 import Register from './pages/Register'
 import XVerification from './pages/XVerification'
-import VerifyResult from "./pages/PhoneVerification/VerifyResult/VerifyResult"
+import EnterPhoneCode from './pages/phoneVerification/EnterPhoneCode/EnterPhoneCode'
+import VerifyResult from './pages/phoneVerification/VerifyResult/VerifyResult'
+import PhoneVerification from './pages/phoneVerification/phoneVerification'
 
 const theme = createTheme({
   palette: {
@@ -40,7 +40,7 @@ const App = () => {
               <Route path='/DiscordVerification' element={<DiscordVerification />} />
               <Route path='/PhoneVerification' element={<PhoneVerification />} />
               <Route path='/PhoneVerification/EnterPhoneCode' element={<EnterPhoneCode />} />
-              <Route path='/PhoneVerification/VerifyResult/:status' element={<VerifyResult/>} />
+              <Route path='/PhoneVerification/VerifyResult/:status' element={<VerifyResult />} />
               <Route path='/XVerification' element={<XVerification />} />
               <Route path='/EmailVerification' element={<EmailVerification />} />
             </Routes>

@@ -5,6 +5,7 @@ import getConstants from '../utils/getConstants'
 import { useNavigate } from 'react-router-dom'
 
 const EmailVerification = () => {
+  const constants = getConstants()
   const [email, setEmail] = useState('')
   const [valid, setValid] = useState(true)
   const [verificationCode, setVerificationCode] = useState('')
@@ -16,9 +17,8 @@ const EmailVerification = () => {
   const [verificationSubmitted, setVerificationSubmitted] = useState(false) // Keeps track of when to display attempts counter
   const authrite = new Authrite()
   const signia = new Signia()
-  const constants = getConstants()
-  const navigate = useNavigate()
   signia.config.confederacyHost = constants.confederacyUrl
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (locked) {
@@ -29,7 +29,7 @@ const EmailVerification = () => {
     }
   }, [locked])
 
-  function getUrl () {
+  function getUrl() {
     const hostname = window.location.hostname
 
     if (hostname.includes('staging')) {
@@ -51,7 +51,6 @@ const EmailVerification = () => {
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault()
-    console.log(email)
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
     if (regex.test(email)) {
       setValid(true)
@@ -68,13 +67,9 @@ const EmailVerification = () => {
         .then((data) => {
           setEmailSentStatus(data.emailSentStatus)
           setSentEmail(data.sentEmail)
-          console.log(data.sentEmail)
-          console.log(data.emailSentStatus)
-          console.log(`RETURNED DATA FROM SENDING TEXT ${data.json}`)
         })
         .catch((error) => {
-          console.log(error)
-          console.error('Error in fetch call to phone verification occurred')
+          console.error('Error in fetch call to phone verification occurred:', error)
         })
     } else {
       setValid(false)
@@ -106,15 +101,12 @@ const EmailVerification = () => {
           }
         })
         .catch((error) => {
-          console.log(error)
-          console.error('Error in handling verification of text code')
+          console.error('Error in handling verification of text code:', error)
         })
     }
   }
 
-  async function callSignia (data) {
-    console.log('Inside Call Signia function')
-    console.log(sentEmail)
+  async function callSignia(data) {
     await signia.publiclyRevealAttributes(
       {},
       constants.certifierUrl,
@@ -122,7 +114,7 @@ const EmailVerification = () => {
       constants.certificateTypes.email,
       true,
       { email: sentEmail, verificationType: 'email' },
-      async (message) => {}
+      async (message) => { }
     )
     setSuccessStatus(true)
 

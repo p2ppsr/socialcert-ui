@@ -11,13 +11,21 @@ import { getBackendUrl } from "../../../utils/getBackendUrl"
 import { formatPhoneNumber } from "react-phone-number-input"
 
 import "./EnterPhoneCode.scss"
-import { sendVerificationText } from "../utils/phoneUtils"
 import NavigateButton from "../../../components/NavigateButton"
+import { sendVerificationText } from "../utils/phoneUtils"
+
+// TODO: Correct response type should be updated in Signia
+interface SigniaResponse {
+  status?: string
+  description?: string
+  code?: string
+}
 
 const EnterPhoneCode = () => {
   // Constructors ============================================================
-  const signia = new Signia()
   const constants = getConstants()
+  const signia = new Signia()
+  signia.config.confederacyHost = constants.confederacyUrl
   const navigate = useNavigate()
   const authrite = new Authrite()
 
@@ -43,32 +51,30 @@ const EnterPhoneCode = () => {
   // Handlers ================================================================
 
   const callSignia: (data: SigniaData) => Promise<void> = async (data) => {
-    console.log("Inside Call Signia function")
-    console.log(`${data.verifiedPhonenumber}`)
-
-    try {
-      await signia.publiclyRevealAttributes(
-        {},
-        constants.certifierUrl,
-        constants.certifierPublicKey,
-        constants.certificateTypes.phone,
-        true,
-        {
-          phoneNumber: data.verifiedPhonenumber,
-          verificationType: "phoneNumber",
-        },
-        async (message: any) => {
-          // Process message here if necessary
-        }
-      )
-
-      setSuccessStatus(true)
-
-      if (!successStatus) {
-        navigate("/")
+    const response: SigniaResponse = await signia.publiclyRevealAttributes(
+      {},
+      constants.certifierUrl,
+      constants.certifierPublicKey,
+      constants.certificateTypes.phone,
+      true,
+      {
+        phoneNumber: data.verifiedPhonenumber,
+        verificationType: "phoneNumber",
+      },
+      async (message: any) => {
+        // Process message here if necessary
       }
-    } catch (error) {
-      console.error("Error in callSignia function:", error)
+    )
+
+    // Check if any HTTP errors were thrown
+    if (response.status === 'error') {
+      throw new Error(response.description)
+    }
+
+    setSuccessStatus(true)
+
+    if (!successStatus) {
+      navigate("/")
     }
   }
 
@@ -83,7 +89,7 @@ const EnterPhoneCode = () => {
   }, [textSentStatus, locked])
 
   const handleVerificationSubmit = async (): // e: React.FormEvent<HTMLFormElement>
-  Promise<void> => {
+    Promise<void> => {
     if (textSentStatus === false || locked === true) {
       console.error("Error: Number is locked or text has not been sent")
     }
@@ -106,13 +112,10 @@ const EnterPhoneCode = () => {
 
       const responseData: VerificationResponse = await response.json()
 
-      console.log("response data: ", responseData)
-
       if (responseData.verificationStatus && responseData.verifiedPhonenumber) {
         const signiaResponse = await callSignia({
           verifiedPhonenumber: responseData.verifiedPhonenumber,
         }) // Pass as SigniaData
-        console.log("signia response: ", signiaResponse)
       } else {
         if (verificationAttempts === 1) {
           setLocked(true)
@@ -166,7 +169,6 @@ const EnterPhoneCode = () => {
               maxLength={6}
               placeholder="xxxxxx"
               onChange={(e) => {
-                console.log(e.target.value)
                 setVerificationCode(e.target.value)
               }}
             />
@@ -199,7 +201,6 @@ const EnterPhoneCode = () => {
         <a
           className="request-new-code-link"
           onClick={async () => {
-            console.log("sent new verification text to: ", textSentPhonenumber)
             await sendVerificationText(textSentPhonenumber)
           }}
         >

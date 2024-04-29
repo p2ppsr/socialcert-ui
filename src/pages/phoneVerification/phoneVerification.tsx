@@ -20,7 +20,7 @@ const PhoneVerification = () => {
   // Constructors ===========================================================
   const authrite = new Authrite()
   const signia = new Signia()
-  const constants = getConstants()
+  signia.config.confederacyHost = getConstants().confederacyUrl
   const navigate = useNavigate()
 
   // State ==================================================================
@@ -43,8 +43,6 @@ const PhoneVerification = () => {
     state.textSentStatus,
     state.setTextSentStatus,
   ])
-
-  signia.config.confederacyHost = constants.confederacyUrl
 
   // Handlers ===================================================================
 

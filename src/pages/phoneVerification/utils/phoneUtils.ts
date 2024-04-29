@@ -14,9 +14,9 @@ export const sendVerificationText = async (phoneNumber: string) => {
       body: JSON.stringify(data),
     })
     const responseData = await response.json()
-  
+
     return responseData
-  } catch(e) {
+  } catch (e) {
     throw e
   }
 }
