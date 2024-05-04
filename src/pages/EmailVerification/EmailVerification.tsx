@@ -70,9 +70,9 @@ const EmailVerification = () => {
     const data = { email, funcAction: "sendEmail" }
     console.log("data: ", data)
     try {
-      // const responseData = await sendVerificationEmail(email)
-      // setEmailSentStatus(responseData.emailSentStatus)
-      // setSentEmail(responseData.sentEmail)
+      const responseData = await sendVerificationEmail(email)
+      setEmailSentStatus(responseData.emailSentStatus)
+      setSentEmail(responseData.sentEmail)
 
       setHasSubmitted(true)
     } catch (error) {
@@ -91,15 +91,15 @@ const EmailVerification = () => {
     e.preventDefault()
 
     // Guard/early return for locked or no email sent status
-    // if (!emailSentStatus || locked) {
-    //   console.error(
-    //     "No email sent status found, or has been locked from too many attempts."
-    //   )
-    //   toast.error(
-    //     "No email sent status found, or has been locked from too many attempts."
-    //   )
-    //   return
-    // }
+    if (!emailSentStatus || locked) {
+      console.error(
+        "No email sent status found, or has been locked from too many attempts."
+      )
+      toast.error(
+        "No email sent status found, or has been locked from too many attempts."
+      )
+      return
+    }
 
     setVerificationSubmitted(true)
     const data = {
@@ -208,7 +208,7 @@ const EmailVerification = () => {
         </>
       )}
 
-      {/* Enter verification page. TODO: This should be its own component, like PhoneVerification/EnterPhoneCode.tsx */}
+      {/* Enter verification page. TODO: This should be its own component-- see src/pages/PhoneVerification/EnterPhoneCode.tsx */}
       {hasSubmitted && (
         <>
           <form onSubmit={handleVerificationSubmit}>
