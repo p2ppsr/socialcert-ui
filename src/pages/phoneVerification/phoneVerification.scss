@@ -67,18 +67,18 @@ $phoneInputBorderRadius: 0.5rem;
     &:focus::placeholder {
       color: transparent;
     }
-    &:focus::-webkit-input-placeholder {
-      color: transparent;
-    }
-    &:focus::-moz-placeholder {
-      color: transparent;
-    }
-    &:focus:-ms-input-placeholder {
-      color: transparent;
-    }
-    &:focus:-moz-placeholder {
-      color: transparent;
-    }
+    // &:focus::-webkit-input-placeholder {
+    //   color: transparent;
+    // }
+    // &:focus::-moz-placeholder {
+    //   color: transparent;
+    // }
+    // &:focus:-ms-input-placeholder {
+    //   color: transparent;
+    // }
+    // &:focus:-moz-placeholder {
+    //   color: transparent;
+    // }
 
     // Hide focus outline
     &:focus {
@@ -117,12 +117,6 @@ $phoneInputBorderRadius: 0.5rem;
   z-index: -1;
   border-top-left-radius: $phoneInputBorderRadius;
   border-bottom-left-radius: $phoneInputBorderRadius;
-}
-
-// Green submit button next to phone input
-.submit-button {
-  border: none;
-  background: $greenColor;
 }
 
 .back-button {

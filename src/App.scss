@@ -33,6 +33,7 @@ html {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 h2 {
@@ -150,4 +151,18 @@ button {
   left: 0;
   width: 100%;
   height: 100vh;
+}
+
+.submit-button {
+  border: none;
+  background: $greenColor;
+  align-self: center;
+}
+
+.verify-input {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: $borderRadius;
+  border: none;
+  margin: 0.5rem;
 }

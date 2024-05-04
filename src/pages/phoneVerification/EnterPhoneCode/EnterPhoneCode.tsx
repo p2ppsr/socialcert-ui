@@ -13,6 +13,7 @@ import { formatPhoneNumber } from "react-phone-number-input"
 import "./EnterPhoneCode.scss"
 import NavigateButton from "../../../components/NavigateButton"
 import { sendVerificationText } from "../utils/phoneUtils"
+import { toast } from "react-toastify"
 
 // TODO: Correct response type should be updated in Signia
 interface SigniaResponse {
@@ -102,7 +103,7 @@ const EnterPhoneCode = () => {
     }
 
     try {
-      const response = await authrite.request(getBackendUrl(), {
+      const response = await authrite.request(getBackendUrl("phone"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -134,8 +135,7 @@ const EnterPhoneCode = () => {
 
   // Effects =============================================================
 
-  // Return user to phone verification if no phone number has been provided
-  // TODO: Commented out for dev purposes
+  // Optional: Return user to phone verification if they end up in this component with no phone number provided
   // useEffect(() => {
   //   if (!textSentPhonenumber) {
   //     navigate("/PhoneVerification")
@@ -201,7 +201,12 @@ const EnterPhoneCode = () => {
         <a
           className="request-new-code-link"
           onClick={async () => {
-            await sendVerificationText(textSentPhonenumber)
+            try {
+              await sendVerificationText(textSentPhonenumber)
+              toast.success('A new code has been sent to your phone.')
+            } catch (e) {
+              toast.error(`There was an error resending a code to your phone: ${e}`)
+            }
           }}
         >
           request a new code

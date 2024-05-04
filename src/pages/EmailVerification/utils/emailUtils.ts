@@ -3,9 +3,9 @@ import { getBackendUrl } from "../../../utils/getBackendUrl"
 
 const authrite = new Authrite()
 
-export const sendVerificationText = async (phoneNumber: string) => {
+export const sendVerificationEmail = async (email: string) => {
   try {
-    const data = { phoneNumber, funcAction: "sendText" }
+    const data = { email, funcAction: "sendEmail" }
     const response = await authrite.request(getBackendUrl("phone"), {
       method: "POST",
       headers: {

@@ -1,24 +1,21 @@
-import React, { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input"
 import "react-phone-number-input/style.css"
 
-import { Authrite } from "authrite-js"
 import { Signia } from "babbage-signia"
 import { useNavigate } from "react-router-dom"
 import socialCertLogo from "../../assets/images/socialCert.svg"
 import getConstants from "../../utils/getConstants"
 
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
-import "./PhoneVerification.scss"
-import GoBackButton from "../../components/NavigateButton"
-import { usePhoneStore } from "../../stores/stores"
-import { getBackendUrl } from "../../utils/getBackendUrl"
-import { sendVerificationText } from "./utils/phoneUtils"
 import NavigateButton from "../../components/NavigateButton"
+import { usePhoneStore } from "../../stores/stores"
+import "./PhoneVerification.scss"
+import { sendVerificationText } from "./utils/phoneUtils"
 
 const PhoneVerification = () => {
   // Constructors ===========================================================
-  const authrite = new Authrite()
+  // const authrite = new Authrite()
   const signia = new Signia()
   signia.config.confederacyHost = getConstants().confederacyUrl
   const navigate = useNavigate()
@@ -51,14 +48,6 @@ const PhoneVerification = () => {
     setIsSubmitting(true)
     if (valid) {
       try {
-        // const data = { phoneNumber, funcAction: "sendText" }
-        // const response = await authrite.request(getBackendUrl(), {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify(data),
-        // })
         const responseData = await sendVerificationText(phoneNumber)
         setTextSentPhonenumber(responseData.textSentPhonenumber)
         setTextSentStatus(responseData.textSentStatus)
@@ -141,29 +130,6 @@ const PhoneVerification = () => {
           </div>
         </>
       )}
-
-      {/* {false && (
-        <>
-          <form onSubmit={handleVerificationSubmit}>
-            <label>
-              Verification Code:
-              <input
-                type="text"
-                name="Verification Code"
-                value={verificationCode}
-                onChange={handleVerificationChange}
-              />
-            </label>
-            <button type="submit">Submit Verification Code</button>
-          </form>
-          {verificationSubmitted && locked && (
-            <p>You must wait 10 minutes before trying again.</p>
-          )}
-          {verificationSubmitted && !locked && (
-            <p>Remaining attempts until lock out: {verificationAttempts}</p>
-          )}
-        </>
-      )} */}
 
       <NavigateButton navigatePath="/" label={"Go back"} />
     </div>

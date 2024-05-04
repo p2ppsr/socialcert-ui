@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Authrite } from 'authrite-js'
 import { Signia } from 'babbage-signia'
-import getConstants from '../utils/getConstants'
+import getConstants from '../../utils/getConstants'
 import { useNavigate } from 'react-router-dom'
 
 const EmailVerification = () => {

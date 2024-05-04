@@ -44,7 +44,7 @@ const PhoneVerification = () => {
     }
   }
 
-  const handlePhoneNumberSubmit = async (e: any) => {
+  const handlePhoneNumberSubmit = async (e) => {
     e.preventDefault()
     if (valid) {
       const data = { phoneNumber, funcAction: 'sendText' }
@@ -66,7 +66,7 @@ const PhoneVerification = () => {
     }
   }
 
-  const handleChange = (value: string) => {
+  const handleChange = (value) => {
     const regex = /[a-zA-Z]/
     if (!regex.test(value)) {
       setPhoneNumber(value)
@@ -74,7 +74,7 @@ const PhoneVerification = () => {
     }
   }
 
-  const handleVerificationSubmit = async (e: any) => {
+  const handleVerificationSubmit = async (e) => {
     e.preventDefault()
     if (textSentStatus === true && locked === false) {
       setVerificationSubmitted(true)
@@ -103,7 +103,7 @@ const PhoneVerification = () => {
     }
   }
 
-  async function callSignia(data: any) {
+  async function callSignia(data) {
     await signia.publiclyRevealAttributes({}, constants.certifierUrl, constants.certifierPublicKey, constants.certificateTypes.phone,
       true, { phoneNumber: data.verifiedPhonenumber, verificationType: 'phoneNumber' }, async (message) => {
       })
@@ -116,7 +116,7 @@ const PhoneVerification = () => {
     }
   }
 
-  const handleVerificationChange = (e: any) => {
+  const handleVerificationChange = (e) => {
     setVerificationCode(e.target.value)
   }
 
