@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 
 interface GoBackButtonProps {
-  navigatePath: string
+  navigatePath: string | undefined
   style?: Object
   label: string
 }
@@ -14,7 +14,7 @@ const NavigateButton = ({ navigatePath, style, label }: GoBackButtonProps) => {
       <button
         className="back-button"
         onClick={() => {
-          navigate(navigatePath)
+          navigate(navigatePath || '/')
         }}
       >
         <svg

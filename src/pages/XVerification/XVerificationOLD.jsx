@@ -1,14 +1,23 @@
+import React, { useEffect, useState } from 'react'
 import { Authrite } from 'authrite-js'
 import { Signia } from 'babbage-signia'
-import React, { useEffect, useState } from 'react'
+import getConstants from '../../utils/getConstants'
 import { useNavigate } from 'react-router-dom'
-import { getBackendUrl } from "../utils/getBackendUrl"
-import getConstants from '../utils/getConstants'
 const constants = getConstants()
 const authrite = new Authrite()
 const signia = new Signia()
 signia.config.confederacyHost = constants.confederacyUrl
 const hostname = window.location.hostname
+
+const getUrl = () => { // should move into utils
+  if (hostname.includes('staging')) {
+    return 'https://staging-backend.socialcert.net/handleXVerification'
+  } else if (hostname.includes('localhost')) {
+    return 'http://localhost:3002/handleXVerification'
+  } else {
+    return 'https://backend.socialcert.net/handleXVerification'
+  }
+}
 
 const XVerification = () => {
   const navigate = useNavigate()
@@ -22,7 +31,7 @@ const XVerification = () => {
       (async () => {
         const data = { oauthToken, oauthVerifier, funcAction: 'getUserInfo' }
         await authrite
-          .request(getBackendUrl("X"), {
+          .request(getUrl(), {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

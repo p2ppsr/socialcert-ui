@@ -14,7 +14,7 @@ import "./VerifyResult.scss"
 */
 
 interface VerifyResultProps {
-  certType: "phone" | "email"
+  certType: string
 }
 
 const VerifyResult = ({ certType }: VerifyResultProps) => {
@@ -24,6 +24,8 @@ const VerifyResult = ({ certType }: VerifyResultProps) => {
         return "phone number"
       case "email":
         return "email address"
+      case "X":
+        return "X account"
     }
   }
 
@@ -33,6 +35,8 @@ const VerifyResult = ({ certType }: VerifyResultProps) => {
         return "/PhoneVerification"
       case "email":
         return "/EmailVerification"
+      case "X":
+        return "/XVerification"
     }
   }
 
@@ -64,13 +68,11 @@ const VerifyResult = ({ certType }: VerifyResultProps) => {
           <img src={errorIcon} className="result-icon" />
           <h1>Failed to Verify.</h1>
           <p>
+            {/* {getCertNameText() !== "" ? <></> : <></>} */}
             Your {getCertNameText()} has failed to verify. <br />
             Please go back and try again.
           </p>
-          <NavigateButton
-            navigatePath={getGoBackPath()}
-            label={"Go back"}
-          />
+          <NavigateButton navigatePath={getGoBackPath()} label={"Go back"} />
         </>
       )}
     </div>
