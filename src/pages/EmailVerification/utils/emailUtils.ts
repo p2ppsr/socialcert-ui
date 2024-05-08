@@ -6,7 +6,7 @@ const authrite = new Authrite()
 export const sendVerificationEmail = async (email: string) => {
   try {
     const data = { email, funcAction: "sendEmail" }
-    const response = await authrite.request(getBackendUrl("phone"), {
+    const response = await authrite.request(getBackendUrl("email"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
