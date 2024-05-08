@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Authrite } from 'authrite-js'
 import { Signia } from 'babbage-signia'
-import getConstants from '../components/utils/getConstants'
+import getConstants from '../../utils/getConstants'
 import { useNavigate } from 'react-router-dom'
 const constants = getConstants()
 const authrite = new Authrite()
@@ -24,6 +24,7 @@ const XVerification = () => {
   const queryParams = new URLSearchParams(window.location.search)
   const oauthToken = queryParams.get('oauth_token')
   const oauthVerifier = queryParams.get('oauth_verifier')
+  const [status, setStatus] = useState('')
 
   useEffect(() => {
     if (oauthToken && oauthVerifier) {
@@ -41,7 +42,7 @@ const XVerification = () => {
           .then(async (data) => {
             await signia.publiclyRevealAttributes({}, constants.certifierUrl, constants.certifierPublicKey, constants.certificateTypes.x,
               true, { XData: { userName: data.userName, profilePhoto: data.profilePhoto }, verificationType: 'X' }, async (message) => {
-
+                setStatus(message)
               })
             navigate('/')
           })
@@ -71,8 +72,12 @@ const XVerification = () => {
     }
   }, [])
 
+  // TODO: Make the UX better on this page!
   return (
-    <p>test landing page</p>
+    <div>
+      <p>X verification page</p>
+      <p>Status: {status}</p>
+    </div>
   )
 }
 

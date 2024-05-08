@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import getConstants from '../components/utils/getConstants'
+import getConstants from '../utils/getConstants'
 import { Signia } from 'babbage-signia'
 
 import useStyles from './register-style'
@@ -31,7 +31,7 @@ const DiscordVerification = () => {
       <div className={classes.background}>
         <div>Status: </div>
         <p>{progressStatus}</p>
-        <p>Once your certificate has been succesfully issued you will be redirected to the landing page</p>
+        <p>Once your certificate has been successfully issued you will be redirected to the landing page</p>
 
       </div>
     )
