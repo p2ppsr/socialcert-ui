@@ -10,7 +10,7 @@ import getConstants from "../../utils/getConstants"
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
 import NavigateButton from "../../components/NavigateButton"
 import { usePhoneStore } from "../../stores/stores"
-import "./PhoneVerification.scss"
+import "./phoneVerification.scss"
 import { sendVerificationText } from "./utils/phoneUtils"
 
 const PhoneVerification = () => {
