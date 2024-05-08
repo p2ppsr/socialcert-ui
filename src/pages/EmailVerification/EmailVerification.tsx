@@ -118,7 +118,7 @@ const EmailVerification = () => {
 
       const responseData = await response.json()
       if (responseData.verificationStatus) {
-        callSignia(responseData)
+        await callSignia(responseData)
       } else {
         if (verificationAttempts === 1) {
           setLocked(true)
@@ -170,10 +170,6 @@ const EmailVerification = () => {
       {!hasSubmitted && (
         <>
           <div style={{ textAlign: "center", maxWidth: "25rem" }}>
-            <p style={{ marginBottom: ".25rem" }}>
-              Add your email address for security, login, and account-related
-              purposes.
-            </p>
             <p>We'll send you an email to verify.</p>
           </div>
           <form onSubmit={handleEmailSubmit}>
@@ -261,14 +257,13 @@ const EmailVerification = () => {
               </p>
             </>
           )}
-
-          <p style={{ margin: "0" }}>Wrong email?</p>
         </>
       )}
+      {/* <p style={{ margin: "0" }}>Wrong email?</p> */}
       <NavigateButton
         navigatePath="/"
         label="Go back"
-        style={{ marginTop: "1rem" }}
+        style={{ marginTop: "4rem" }}
       />
     </div>
   )
