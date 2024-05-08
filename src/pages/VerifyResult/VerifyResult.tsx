@@ -36,7 +36,7 @@ const VerifyResult = ({ certType }: VerifyResultProps) => {
       case "email":
         return "/EmailVerification"
       case "X":
-        return "/XVerification"
+        return "/"
     }
   }
 
