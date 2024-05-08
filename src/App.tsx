@@ -9,7 +9,7 @@ import Register from "./pages/Register"
 import XVerification from "./pages/XVerification/XVerification"
 import EnterPhoneCode from './pages/phoneVerification/EnterPhoneCode/EnterPhoneCode'
 import VerifyResult from "./pages/VerifyResult/VerifyResult"
-import PhoneVerification from "./pages/phoneVerification/PhoneVerification"
+import PhoneVerification from "./pages/phoneVerification/phoneVerification"
 import { ToastContainer } from "react-toastify"
 
 const theme = createTheme({
