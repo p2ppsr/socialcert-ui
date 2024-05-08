@@ -7,7 +7,7 @@ import DiscordVerification from "./pages/discordVerification"
 import EmailVerification from "./pages/EmailVerification/EmailVerification"
 import Register from "./pages/Register"
 import XVerification from "./pages/XVerification/XVerification"
-import EnterPhoneCode from "./pages/PhoneVerification/EnterPhoneCode/EnterPhoneCode"
+import EnterPhoneCode from './pages/PhoneVerification/EnterPhoneCode/EnterPhoneCode'
 import VerifyResult from "./pages/VerifyResult/VerifyResult"
 import PhoneVerification from "./pages/PhoneVerification/PhoneVerification"
 import { ToastContainer } from "react-toastify"
