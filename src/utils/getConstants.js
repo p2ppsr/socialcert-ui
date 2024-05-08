@@ -12,7 +12,7 @@ const getConstants = () => {
     certifierPublicKey = '02cf6cdf466951d8dfc9e7c9367511d0007ed6fba35ed42d425cc412fd6cfd4a17' // correct
     confederacyUrl = 'https://staging-confederacy.babbage.systems'
   } else if (window.location.host.startsWith('localhost')) {
-    certifierUrl = 'http://localhost:3002'
+    certifierUrl = 'https://staging-backend.socialcert.net/'
     certifierPublicKey = '02cf6cdf466951d8dfc9e7c9367511d0007ed6fba35ed42d425cc412fd6cfd4a17' // correct
     confederacyUrl = 'https://staging-confederacy.babbage.systems'
   } else {

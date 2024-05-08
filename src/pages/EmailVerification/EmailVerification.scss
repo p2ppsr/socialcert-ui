@@ -1,0 +1,52 @@
+@import "../../styles/styleVariables.scss";
+
+.email-input {
+  background: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ) !important; // Main background for normal state
+  border: none;
+  padding: 1rem;
+  border-radius: $borderRadius;
+  color: white !important; // Main text color
+  font-size: 1.25rem;
+  min-width: 18rem;
+  border-bottom: 1px solid transparent; // Initially transparent bottom border
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  &:focus {
+    outline: none;
+    background: rgba(
+      255,
+      255,
+      255,
+      0.1
+    ) !important; // Ensure background stays consistent on focus
+    border-bottom: 1px solid white; // Highlight with a white bottom border on focus
+
+    &::placeholder {
+      color: transparent; // Hide placeholder on focus
+    }
+  }
+
+  // Handling autocomplete styles for both WebKit and Firefox
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active,
+  &:-moz-autofill,
+  &:-moz-autofill:hover,
+  &:-moz-autofill:focus,
+  &:-moz-autofill:active {
+    transition: background-color 5000s ease-in-out 0s,
+      color 5000s ease-in-out 0s; // Delays autofill styling effects
+    -webkit-text-fill-color: white !important; // Ensure the text color remains white
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.1) inset !important; // Maintain background color
+    box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.1) inset !important; // Apply for potential non-WebKit browsers
+  }
+}

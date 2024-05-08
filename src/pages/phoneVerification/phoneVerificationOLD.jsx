@@ -4,7 +4,7 @@ import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input'
 
 import { Authrite } from 'authrite-js'
 import { Signia } from 'babbage-signia'
-import getConstants from '../components/utils/getConstants'
+import getConstants from '../../utils/getConstants'
 import { useNavigate } from 'react-router-dom'
 
 const PhoneVerification = () => {
@@ -18,10 +18,10 @@ const PhoneVerification = () => {
   const [locked, setLocked] = useState(false)
   const [verificationSubmitted, setVerificationSubmitted] = useState(false) // New state variable
   const authrite = new Authrite()
-  const signia = new Signia()
   const constants = getConstants()
-  const navigate = useNavigate()
+  const signia = new Signia()
   signia.config.confederacyHost = constants.confederacyUrl
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (locked) {
@@ -32,7 +32,7 @@ const PhoneVerification = () => {
     }
   }, [locked])
 
-  function getUrl () {
+  function getUrl() {
     const hostname = window.location.hostname
 
     if (hostname.includes('staging')) {
@@ -61,8 +61,7 @@ const PhoneVerification = () => {
           setTextSentPhonenumber(data.textSentPhonenumber)
         })
         .catch(error => {
-          console.log(error)
-          console.error('Error in fetch call to phone verification occured')
+          console.error('Error in fetch call to phone verification occurred:', error)
         })
     }
   }
@@ -99,15 +98,12 @@ const PhoneVerification = () => {
           }
         })
         .catch(error => {
-          console.log(error)
-          console.error('Error in handling verification of text code')
+          console.error('Error in handling verification of text code:', error)
         })
     }
   }
 
-  async function callSignia (data) {
-    console.log('Inside Call Signia function')
-    console.log(`${data.verifiedPhonenumber}`)
+  async function callSignia(data) {
     await signia.publiclyRevealAttributes({}, constants.certifierUrl, constants.certifierPublicKey, constants.certificateTypes.phone,
       true, { phoneNumber: data.verifiedPhonenumber, verificationType: 'phoneNumber' }, async (message) => {
       })

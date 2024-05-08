@@ -1,35 +1,15 @@
-import React, { useState } from "react"
-import useStyles from "./register-style"
-import Verify from "../components/Verify"
-import {
-  Container,
-  Typography,
-  Grid,
-  Paper,
-  Button,
-  LinearProgress,
-} from "@mui/material"
-import { ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-import VerifiedUserIcon from "@mui/icons-material/VerifiedUser"
+import React from "react" // necessary for JSX, but not TSX files
 import { useNavigate } from "react-router-dom"
+import "react-toastify/dist/ReactToastify.css"
 
 // Assets
-import socialCertLogo from "../assets/images/socialCert.svg"
-import { FaPhoneAlt, FaDiscord } from "react-icons/fa"
+import { FaDiscord, FaPhoneAlt } from "react-icons/fa"
 import { FaXTwitter } from "react-icons/fa6"
-import { IoIosMail } from "react-icons/io";
-
+import { IoIosMail } from "react-icons/io"
+import socialCertLogo from "../assets/images/socialCert.svg"
 
 const Register = () => {
   const navigate = useNavigate()
-  const classes = useStyles()
-  const [success, setSuccess] = useState(false)
-  const [openVerify, setOpenVerify] = useState(false)
-  const [verifyStatus, setVerifyStatus] = useState("")
-  const [inquiryId, setInquiryId] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [progressStatus, setProgressStatus] = useState("")
 
   const handleDiscordClick = async () => {
     const hostname = window.location.hostname
@@ -46,30 +26,24 @@ const Register = () => {
     }
   }
 
-  const handlePhoneClick = async () => {
-    navigate("/phoneVerification")
-  }
-
   return (
     <div className="container">
       <div className="sub-container">
         <div className="sub-container-2">
           <h2 style={{ margin: 0 }}>Welcome to</h2>
-          <img
-            src={socialCertLogo}
-            width={300}
-            id="main-logo"
-            className="button"
-          />
+          <img src={socialCertLogo} width={300} className="main-logo" />
         </div>
       </div>
-      <p style={{ marginBottom: "3rem" }}>
+      <p style={{ marginBottom: "2rem" }}>
         Access the MetaNet using your own certified identity{" "}
       </p>
 
       <h3>Choose your desired identity certification</h3>
       <div className="flex button-group">
-        <button id="phone-cert-button" onClick={handlePhoneClick}>
+        <button
+          id="phone-cert-button"
+          onClick={() => navigate("/PhoneVerification")}
+        >
           <FaPhoneAlt />
           <label>Phone Number</label>
         </button>
@@ -79,23 +53,16 @@ const Register = () => {
           <label>Discord</label>
         </button>
 
-        <button
-          id="x-cert-button"
-          onClick={() => {
-            navigate("/XVerification")
-          }}
-        >
+        <button id="x-cert-button" onClick={() => navigate("/XVerification")}>
           <FaXTwitter />
           X/Twitter
         </button>
 
         <button
           id="email-cert-button"
-          onClick={() => {
-            navigate("/emailVerification")
-          }}
+          onClick={() => navigate("/EmailVerification")}
         >
-          <IoIosMail/>
+          <IoIosMail />
           Email
         </button>
       </div>
