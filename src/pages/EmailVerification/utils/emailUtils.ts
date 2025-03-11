@@ -26,8 +26,8 @@ export const sendVerificationEmail = async (email: string) => {
 export const acquireEmailCertificate = async(certType: string, verifyEmail: string) => {
   await clientWallet.acquireCertificate({
   certifier: '02cab461076409998157f05bb90f07886380186fd3d88b99c549f21de4d2511b83',
-  certifierUrl: 'http://localhost:8080/',
-  type: certType,
+  certifierUrl: 'http://localhost:8080',
+  type: 'exOl3KM0dIJ04EW5pZgbZmPag6MdJXd3/a1enmUU/BA=',
   acquisitionProtocol: 'issuance',
   fields: {
     email: verifyEmail
