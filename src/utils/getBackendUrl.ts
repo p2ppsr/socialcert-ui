@@ -6,7 +6,7 @@ export const getBackendUrl = (certType: string) => {
     if (hostname.includes("staging")) {
       return "https://staging-backend.socialcert.net"
     } else if (hostname.includes("localhost")) {
-      return "http://localhost:3002"
+      return "http://localhost:8080"
     } else {
       return "https://backend.socialcert.net"
     }

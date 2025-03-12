@@ -40,23 +40,23 @@ const Register = () => {
 
       <h3>Choose your desired identity certification</h3>
       <div className="flex button-group">
-        <button
+        {/* <button
           id="phone-cert-button"
           onClick={() => navigate("/PhoneVerification")}
         >
           <FaPhoneAlt />
           <label>Phone Number</label>
-        </button>
+        </button> */}
 
-        <button id="discord-cert-button" onClick={handleDiscordClick}>
+        {/* <button id="discord-cert-button" onClick={handleDiscordClick}>
           <FaDiscord />
           <label>Discord</label>
-        </button>
+        </button> */}
 
-        <button id="x-cert-button" onClick={() => navigate("/XVerification")}>
+        {/* <button id="x-cert-button" onClick={() => navigate("/XVerification")}>
           <FaXTwitter />
           X/Twitter
-        </button>
+        </button> */}
 
         <button
           id="email-cert-button"
