@@ -117,7 +117,7 @@ const EmailVerification = () => {
       const responseData = await response.json()
       if (responseData.verificationStatus) {
         const newCertificate = await acquireEmailCertificate(responseData.certType, data.verifyEmail)
-        const publicationResult = new IdentityClient(new WalletClient()).publiclyRevealAttributes(
+        const publicationResult = await new IdentityClient(new WalletClient()).publiclyRevealAttributes(
           newCertificate,
           ['email'],
         )
