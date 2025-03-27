@@ -1,5 +1,3 @@
-import { Authrite } from "authrite-js"
-import { Signia } from "babbage-signia"
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import socialCertLogo from "../../assets/images/socialCert.svg"
@@ -9,16 +7,15 @@ import VerifyCodeInput from "../../components/VerifyCodeInput/VerifyCodeInput"
 import { getBackendUrl } from "../../utils/getBackendUrl"
 import getConstants from "../../utils/getConstants"
 import "./EmailVerification.scss"
-import { sendVerificationEmail } from "./utils/emailUtils"
+import { sendVerificationEmail, acquireEmailCertificate } from "./utils/emailUtils"
 import { toast } from "react-toastify"
+import { WalletClient, AuthFetch, IdentityClient } from "@bsv/sdk"
+
 
 const EmailVerification = () => {
   // Constructors ======================================================================
-  const authrite = new Authrite()
-  const signia = new Signia()
   const constants = getConstants()
   const navigate = useNavigate()
-  signia.config.confederacyHost = constants.confederacyUrl
 
   // State =======================================================================
 
@@ -59,7 +56,7 @@ const EmailVerification = () => {
     e.preventDefault()
 
     const validEmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-
+    //    const identityKey = await clientWallet.getPublicKey({ identityKey: true })
     if (!validEmailRegex.test(email)) {
       setValid(false)
       return
@@ -108,7 +105,8 @@ const EmailVerification = () => {
       funcAction: "verifyCode",
     }
     try {
-      const response = await authrite.request(getBackendUrl("email"), {
+      const clientWallet = new WalletClient('json-api', 'localhost')
+      const response = await new AuthFetch(clientWallet).fetch(getBackendUrl("email"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -118,7 +116,12 @@ const EmailVerification = () => {
 
       const responseData = await response.json()
       if (responseData.verificationStatus) {
-        await callSignia(responseData)
+        const newCertificate = await acquireEmailCertificate(responseData.certType, data.verifyEmail)
+        const publicationResult = await new IdentityClient(new WalletClient()).publiclyRevealAttributes(
+          newCertificate,
+          ['email'],
+        )
+        console.log('PUBLIC REVELATION RESULT:', publicationResult)
       } else {
         if (verificationAttempts === 1) {
           setLocked(true)
@@ -127,32 +130,14 @@ const EmailVerification = () => {
       }
 
       setSuccessStatus(true)
+      if (!successStatus) {
+        navigate("/")
+      }
       navigate("/EmailVerification/VerifyResult/success")
     } catch (error) {
       console.error("Error in handling verification of email code:", error)
       setSuccessStatus(false)
       navigate("/EmailVerification/VerifyResult/error")
-    }
-  }
-
-  const callSignia = async (data: any) => {
-    // Define the data type if possible
-    await signia.publiclyRevealAttributes(
-      {},
-      constants.certifierUrl,
-      constants.certifierPublicKey,
-      constants.certificateTypes.email,
-      true,
-      { email: sentEmail, verificationType: "email" },
-      async (message: any) => {
-        // Define the message type if possible
-        console.log("status:", message)
-      }
-    )
-    setSuccessStatus(true)
-
-    if (!successStatus) {
-      navigate("/")
     }
   }
 
