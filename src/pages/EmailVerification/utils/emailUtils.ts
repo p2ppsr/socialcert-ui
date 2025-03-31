@@ -1,6 +1,6 @@
 import { Authrite } from "authrite-js"
-import { getBackendUrl } from "../../../utils/getBackendUrl"
-import {WalletClient, AuthFetch} from "@bsv/sdk"
+import { getBackendUrl, getBaseUrl } from "../../../utils/getBackendUrl"
+import { WalletClient, AuthFetch, AcquireCertificateResult } from "@bsv/sdk"
 
 const authrite = new Authrite()
 const clientWallet = new WalletClient('json-api', 'localhost')
@@ -23,14 +23,15 @@ export const sendVerificationEmail = async (email: string) => {
   }
 }
 
-export const acquireEmailCertificate = async(certType: string, verifyEmail: string) => {
-  await clientWallet.acquireCertificate({
-  certifier: '02cab461076409998157f05bb90f07886380186fd3d88b99c549f21de4d2511b83',
-  certifierUrl: 'http://localhost:8080',
-  type: 'exOl3KM0dIJ04EW5pZgbZmPag6MdJXd3/a1enmUU/BA=',
-  acquisitionProtocol: 'issuance',
-  fields: {
-    email: verifyEmail
-  }
-})
+export const acquireEmailCertificate = async (certType: string, verifyEmail: string): Promise<AcquireCertificateResult> => {
+  const newCertificate = await clientWallet.acquireCertificate({
+    certifier: '02cf6cdf466951d8dfc9e7c9367511d0007ed6fba35ed42d425cc412fd6cfd4a17',
+    certifierUrl: await getBaseUrl(),
+    type: 'exOl3KM0dIJ04EW5pZgbZmPag6MdJXd3/a1enmUU/BA=',
+    acquisitionProtocol: 'issuance',
+    fields: {
+      email: verifyEmail
+    }
+  })
+  return newCertificate
 }

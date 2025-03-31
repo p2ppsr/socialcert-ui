@@ -9,7 +9,7 @@ import getConstants from "../../utils/getConstants"
 import "./EmailVerification.scss"
 import { sendVerificationEmail, acquireEmailCertificate } from "./utils/emailUtils"
 import { toast } from "react-toastify"
-import {WalletClient, AuthFetch} from "@bsv/sdk"
+import { WalletClient, AuthFetch, IdentityClient } from "@bsv/sdk"
 
 
 const EmailVerification = () => {
@@ -57,7 +57,7 @@ const EmailVerification = () => {
     e.preventDefault()
 
     const validEmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-//    const identityKey = await clientWallet.getPublicKey({ identityKey: true })
+    //    const identityKey = await clientWallet.getPublicKey({ identityKey: true })
     if (!validEmailRegex.test(email)) {
       setValid(false)
       return
@@ -107,7 +107,7 @@ const EmailVerification = () => {
     }
     try {
       const clientWallet = new WalletClient('json-api', 'localhost')
-      const response =  await new AuthFetch(clientWallet).fetch(getBackendUrl("email"), {
+      const response = await new AuthFetch(clientWallet).fetch(getBackendUrl("email"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -117,7 +117,12 @@ const EmailVerification = () => {
 
       const responseData = await response.json()
       if (responseData.verificationStatus) {
-        await acquireEmailCertificate(responseData.certType, data.verifyEmail)
+        const newCertificate = await acquireEmailCertificate(responseData.certType, data.verifyEmail)
+        const publicationResult = await new IdentityClient(new WalletClient()).publiclyRevealAttributes(
+          newCertificate,
+          ['email'],
+        )
+        console.log('PUBLIC REVELATION RESULT:', publicationResult)
       } else {
         if (verificationAttempts === 1) {
           setLocked(true)
