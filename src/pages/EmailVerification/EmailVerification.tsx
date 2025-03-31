@@ -32,6 +32,7 @@ const EmailVerification = () => {
   )
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState(false)
+  const [publiclyRevealAttributes, setPubliclyRevealAttributes] = useState(false);
 
   // Effects ====================================================================
 
@@ -166,6 +167,15 @@ const EmailVerification = () => {
               <button type="submit" className="submit-button">
                 Submit
               </button>
+            </div>
+            <div className="checkbox-container">
+              <input
+                type="checkbox"
+                id="publiclyReveal"
+                checked={publiclyRevealAttributes}
+                onChange={() => setPubliclyRevealAttributes(!publiclyRevealAttributes)}
+              />
+              <label>Publicly reveal certificate attributes</label>
             </div>
           </form>
           {!valid && (
