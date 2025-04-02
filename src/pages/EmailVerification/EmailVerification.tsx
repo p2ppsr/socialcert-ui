@@ -118,11 +118,14 @@ const EmailVerification = () => {
       const responseData = await response.json()
       if (responseData.verificationStatus) {
         const newCertificate = await acquireEmailCertificate(responseData.certType, data.verifyEmail)
-        const publicationResult = await new IdentityClient(new WalletClient()).publiclyRevealAttributes(
-          newCertificate,
-          ['email'],
-        )
-        console.log('PUBLIC REVELATION RESULT:', publicationResult)
+        if(publiclyRevealAttributes)
+        {
+            const publicationResult = await new IdentityClient(new WalletClient()).publiclyRevealAttributes(
+            newCertificate,
+            ['email'],
+          )
+          console.log('PUBLIC REVELATION RESULT:', publicationResult)
+        }
       } else {
         if (verificationAttempts === 1) {
           setLocked(true)
