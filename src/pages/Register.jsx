@@ -53,10 +53,10 @@ const Register = () => {
           <label>Discord</label>
         </button> */}
 
-        {/* <button id="x-cert-button" onClick={() => navigate("/XVerification")}>
+        <button id="x-cert-button" onClick={() => navigate("/XVerification")}>
           <FaXTwitter />
           X/Twitter
-        </button> */}
+        </button>
 
         <button
           id="email-cert-button"

@@ -1,8 +1,6 @@
-import { Authrite } from "authrite-js"
 import { getBackendUrl, getBaseUrl } from "../../../utils/getBackendUrl"
 import { WalletClient, AuthFetch, AcquireCertificateResult } from "@bsv/sdk"
 
-const authrite = new Authrite()
 const clientWallet = new WalletClient('json-api', 'localhost')
 
 export const sendVerificationEmail = async (email: string) => {
