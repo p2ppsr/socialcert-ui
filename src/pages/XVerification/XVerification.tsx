@@ -6,7 +6,7 @@ import { useAsyncEffect } from "use-async-effect"
 import socialCertLogo from "../../assets/images/socialCert.svg"
 import NavigateButton from "../../components/NavigateButton"
 import { FaXTwitter } from "react-icons/fa6"
-import { WalletClient, AuthFetch, AcquireCertificateResult } from "@bsv/sdk"
+import { WalletClient, AuthFetch, AcquireCertificateResult, IdentityClient } from "@bsv/sdk"
 
 
 const clientWallet = new WalletClient('json-api', 'localhost')
@@ -43,13 +43,19 @@ const XVerification = () => {
         const newCertificate = await clientWallet.acquireCertificate({
             certifier: '02cf6cdf466951d8dfc9e7c9367511d0007ed6fba35ed42d425cc412fd6cfd4a17',
             certifierUrl: getBaseUrl(),
-            type: 'exOl3KM0dIJ04EW5pZgbZmPag6MdJXd3/a1enmUU/BA=',
+            type: 'vdDWvftf1H+5+ZprUw123kjHlywH+v20aPQTuXgMpNc=',
             acquisitionProtocol: 'issuance',
             fields: {
               userName: userData.userName,
               profilePhoto: userData.profilePhoto,
             }
           })
+
+          const publicationResult = await new IdentityClient(new WalletClient()).publiclyRevealAttributes(
+                    newCertificate,
+                    ['userName', 'profilePhoto'],
+                  )
+                  console.log('PUBLIC REVELATION RESULT:', publicationResult)
      
         navigate("/")
       } else {
