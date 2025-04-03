@@ -59,7 +59,6 @@ const XVerification = () => {
      
         navigate("/")
       } else {
-        console.log("IN MAKE REQUEST")
         const data = { funcAction: "makeRequest", hostURL: hostname }
         const response = await new AuthFetch(clientWallet).fetch(getBackendUrl("X"), {
           method: "POST",
