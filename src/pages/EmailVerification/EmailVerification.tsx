@@ -32,6 +32,8 @@ const EmailVerification = () => {
   )
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState(false)
+  const [isChecked, setIsChecked] = useState(false)
+
 
   // Effects ====================================================================
 
@@ -117,11 +119,14 @@ const EmailVerification = () => {
       const responseData = await response.json()
       if (responseData.verificationStatus) {
         const newCertificate = await acquireEmailCertificate(responseData.certType, data.verifyEmail)
+        if(isChecked){
         const publicationResult = await new IdentityClient(new WalletClient()).publiclyRevealAttributes(
           newCertificate,
           ['email'],
         )
         console.log('PUBLIC REVELATION RESULT:', publicationResult)
+      }
+      navigate("/EmailVerification/VerifyResult/success")
       } else {
         if (verificationAttempts === 1) {
           setLocked(true)
@@ -131,9 +136,7 @@ const EmailVerification = () => {
 
       setSuccessStatus(true)
       if (!successStatus) {
-        navigate("/")
       }
-      navigate("/EmailVerification/VerifyResult/success")
     } catch (error) {
       console.error("Error in handling verification of email code:", error)
       setSuccessStatus(false)
@@ -176,6 +179,14 @@ const EmailVerification = () => {
           {!valid && (
             <b style={{ color: "tomato" }}>A valid email is required</b>
           )}
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              checked={isChecked}
+              onChange={() => setIsChecked(!isChecked)}
+            />
+            <label>Publicly reveal attributes of issued certificates</label>
+          </div>
         </>
       )}
 
