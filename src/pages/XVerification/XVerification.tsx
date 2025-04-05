@@ -23,18 +23,18 @@ const XVerification = () => {
   // State ==================================================================
   const [status, setStatus] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  
+
   // Initialize isChecked from localStorage if it exists, otherwise default to false
   const [isChecked, setIsChecked] = useState<boolean>(() => {
-    const savedValue = localStorage.getItem("isChecked");
-    return savedValue === "true" ? true : false;
-  });
+    const savedValue = localStorage.getItem("isChecked")
+    // If savedValue is null, default to true; otherwise, return the parsed boolean
+    return savedValue !== null ? savedValue === "true" : true
+  })
 
-  // Store isChecked state in localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem("isChecked", isChecked.toString());
-    console.log(`Saved to localStorage: ${isChecked}`);
-  }, [isChecked]);
+    localStorage.setItem("isChecked", isChecked.toString())
+    console.log(`Saved to localStorage: ${isChecked}`)
+  }, [isChecked])
 
   useAsyncEffect(async () => {
     try {
@@ -43,7 +43,7 @@ const XVerification = () => {
         console.log("IN GET USER INFO")
 
         const data = { oauthToken, oauthVerifier, funcAction: "getUserInfo" }
-          
+
         const response = await new AuthFetch(clientWallet).fetch(getBackendUrl("X"), {
           method: "POST",
           headers: {
@@ -51,7 +51,7 @@ const XVerification = () => {
           },
           body: JSON.stringify(data),
         })
-        
+
         const userData = await response.json()
         const newCertificate = await clientWallet.acquireCertificate({
           certifier: '02cf6cdf466951d8dfc9e7c9367511d0007ed6fba35ed42d425cc412fd6cfd4a17',
@@ -63,11 +63,11 @@ const XVerification = () => {
             profilePhoto: userData.profilePhoto,
           }
         })
-        
+
         // Get the current value from localStorage to ensure it's the most up-to-date
         const shouldRevealPublicly = localStorage.getItem("isChecked") === "true";
         console.log(`BEFORE IF STATEMENT FOR PUBLIC REVEAL IS CHECKED: ${shouldRevealPublicly}`)
-        
+
         if (shouldRevealPublicly) {
           console.log('INSIDE IF STATEMENT')
           const publicationResult = await new IdentityClient(new WalletClient()).publiclyRevealAttributes(
@@ -76,7 +76,7 @@ const XVerification = () => {
           )
           console.log('PUBLIC REVELATION RESULT:', publicationResult)
         }
-        
+
         console.log(`PAST IF STATEMENT FOR PUBLIC REVEAL`)
         navigate('/XVerification/VerifyResult/success')
       }
@@ -93,7 +93,7 @@ const XVerification = () => {
       console.log("ON X PAGE")
       // Ensure the current checkbox state is saved before redirecting
       localStorage.setItem("isChecked", isChecked.toString());
-      
+
       const data = { funcAction: "makeRequest", hostURL: hostname }
       const response = await new AuthFetch(clientWallet).fetch(getBackendUrl("X"), {
         method: "POST",
