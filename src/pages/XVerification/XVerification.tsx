@@ -89,6 +89,7 @@ const XVerification = () => {
   }, [])
 
   const handleSignIn = async () => {
+    setIsLoading(true);
     try {
       console.log("ON X PAGE")
       // Ensure the current checkbox state is saved before redirecting
@@ -105,6 +106,7 @@ const XVerification = () => {
       const requestTokenData = await response.json()
       window.location.href = `https://api.twitter.com/oauth/authenticate?oauth_token=${requestTokenData.requestToken}`
     } catch (error) {
+      setIsLoading(false);
       console.error("Error in processing authrite request", error)
       navigate('/XVerification/VerifyResult/error')
     }
@@ -127,7 +129,9 @@ const XVerification = () => {
 
       {isLoading ? (
         <div className="flex" style={{ alignItems: "center" }}>
-          <p>Checking verification status...</p>
+          {oauthToken && oauthVerifier
+        ? "Checking verification status..."
+        : "You will be redirected to the X sign-in page shortly..."}
           <LoadingSpinner />
         </div>
       ) : (
