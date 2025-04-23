@@ -179,7 +179,7 @@ const EmailVerification = () => {
           {!valid && (
             <b style={{ color: "tomato" }}>A valid email is required</b>
           )}
-          <div className="checkbox-container">
+          <div className="checkbox-container" style={{ paddingTop: "0.5rem" }}> 
             <input
               type="checkbox"
               checked={isChecked}
@@ -236,7 +236,7 @@ const EmailVerification = () => {
                 Haven't received an email in 1-2 mins? <br />
                 Make sure your email is correct above, then <br />
                 <a
-                  className="request-new-code-link"
+                  className="request-new-code-link" 
                   onClick={async () => {
                     try {
                       await sendVerificationEmail(sentEmail)
