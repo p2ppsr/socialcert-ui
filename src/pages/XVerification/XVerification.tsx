@@ -23,6 +23,8 @@ const XVerification = () => {
   // State ==================================================================
   const [status, setStatus] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [loadingMessage, setLoadingMessage] = useState("Processing...");
+
 
   // Initialize isChecked from localStorage if it exists, otherwise default to false
   const [isChecked, setIsChecked] = useState<boolean>(() => {
@@ -39,8 +41,8 @@ const XVerification = () => {
   useAsyncEffect(async () => {
     try {
       if (oauthToken && oauthVerifier) {
+        setLoadingMessage("Creating your certificate, please check the metanet client...")
         setIsLoading(true)
-        console.log("IN GET USER INFO")
 
         const data = { oauthToken, oauthVerifier, funcAction: "getUserInfo" }
 
@@ -51,7 +53,6 @@ const XVerification = () => {
           },
           body: JSON.stringify(data),
         })
-
         const userData = await response.json()
         const newCertificate = await clientWallet.acquireCertificate({
           certifier: '02cf6cdf466951d8dfc9e7c9367511d0007ed6fba35ed42d425cc412fd6cfd4a17',
@@ -66,7 +67,6 @@ const XVerification = () => {
 
         // Get the current value from localStorage to ensure it's the most up-to-date
         const shouldRevealPublicly = localStorage.getItem("isChecked") === "true";
-        console.log(`BEFORE IF STATEMENT FOR PUBLIC REVEAL IS CHECKED: ${shouldRevealPublicly}`)
 
         if (shouldRevealPublicly) {
           console.log('INSIDE IF STATEMENT')
@@ -74,10 +74,8 @@ const XVerification = () => {
             newCertificate,
             ['userName', 'profilePhoto'],
           )
-          console.log('PUBLIC REVELATION RESULT:', publicationResult)
         }
 
-        console.log(`PAST IF STATEMENT FOR PUBLIC REVEAL`)
         navigate('/XVerification/VerifyResult/success')
       }
     } catch (error) {
@@ -89,6 +87,8 @@ const XVerification = () => {
   }, [])
 
   const handleSignIn = async () => {
+    setLoadingMessage("You will be redirected to the X sign-in page shortly...");
+    setIsLoading(true);
     try {
       console.log("ON X PAGE")
       // Ensure the current checkbox state is saved before redirecting
@@ -105,6 +105,7 @@ const XVerification = () => {
       const requestTokenData = await response.json()
       window.location.href = `https://api.twitter.com/oauth/authenticate?oauth_token=${requestTokenData.requestToken}`
     } catch (error) {
+      setIsLoading(false);
       console.error("Error in processing authrite request", error)
       navigate('/XVerification/VerifyResult/error')
     }
@@ -127,7 +128,7 @@ const XVerification = () => {
 
       {isLoading ? (
         <div className="flex" style={{ alignItems: "center" }}>
-          <p>Checking verification status...</p>
+          <span style={{ marginRight: "1rem" }}>{loadingMessage}</span>
           <LoadingSpinner />
         </div>
       ) : (

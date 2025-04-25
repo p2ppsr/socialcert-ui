@@ -166,3 +166,33 @@ button {
   border: none;
   margin: 0.5rem;
 }
+
+.sign-in-button {
+  background-color: #000;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: $borderRadius;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.checkbox-container {
+  font-size: 0.95rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  input[type="checkbox"] {
+    transform: scale(1.2);
+    accent-color: #00ff9f;
+  }
+}
