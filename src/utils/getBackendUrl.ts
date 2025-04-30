@@ -18,6 +18,7 @@ export const getBackendUrl = (certType: string) => {
     phone: "/sendVerificationText",
     email: "/handleEmailVerification",
     X: "/handleXVerification",
+    discord: "/handleDiscordVerification"
   }
 
   const baseUrl = getBaseUrl()
