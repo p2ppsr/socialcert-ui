@@ -47,6 +47,8 @@ const App = () => {
                 path="/DiscordVerification"
                 element={<DiscordVerification />}
               />
+              <Route path="/DiscordVerification/VerifyResults/:status" element={<VerifyResult certType="discord" 
+              />} />
               <Route
                 path="/PhoneVerification"
                 element={<PhoneVerification />}

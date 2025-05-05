@@ -33,33 +33,59 @@ const DiscordVerification = () => {
     console.log(`Saved to localStorage: ${isChecked}`);
   }, [isChecked]);
 
-  useAsyncEffect( async () => {
+  useAsyncEffect(async () => {
     const params = new URLSearchParams(window.location.search)
     const accessCode = params.get('code');
-    if (accessCode){
-    const data = { accessCode, funcAction: "getDiscordData" }
-              
-            const response = await new AuthFetch(clientWallet).fetch(getBackendUrl("discord"), {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(data),
-            })
-            const userData = await response.json()
-            const newCertificate = await clientWallet.acquireCertificate({
-              certifier: '02cf6cdf466951d8dfc9e7c9367511d0007ed6fba35ed42d425cc412fd6cfd4a17',
-              certifierUrl: getBaseUrl(),
-              type: '2TgqRC35B1zehGmB21xveZNc7i5iqHc0uxMb+1NMPW4=',
-              acquisitionProtocol: 'issuance',
-              fields: {
-                userName: userData.userName,
-                profilePhoto: userData.profilePhoto,
-              }
-            })
+    try {
+      if (accessCode) {
+        setLoadingMessage("Creating your certificate, please check the metanet client...")
+        setIsLoading(true)
+        const data = { accessCode, funcAction: "getDiscordData" }
+
+        const response = await new AuthFetch(clientWallet).fetch(getBackendUrl("discord"), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+        const userData = await response.json()
+        console.log(`user data ${userData}`);
+        console.log(userData.userName);
+        console.log(userData.profilePhoto);
+
+        const newCertificate = await clientWallet.acquireCertificate({
+          certifier: '02cf6cdf466951d8dfc9e7c9367511d0007ed6fba35ed42d425cc412fd6cfd4a17',
+          certifierUrl: getBaseUrl(),
+          type: '2TgqRC35B1zehGmB21xveZNc7i5iqHc0uxMb+1NMPW4=',
+          acquisitionProtocol: 'issuance',
+          fields: {
+            userName: userData.userName,
+            profilePhoto: userData.profilePhoto,
+          }
+        })
+
+        const shouldRevealPublicly = localStorage.getItem("isChecked") === "true";
+
+        if (shouldRevealPublicly) {
+          console.log('INSIDE IF STATEMENT')
+          const publicationResult = await new IdentityClient(new WalletClient()).publiclyRevealAttributes(
+            newCertificate,
+            ['userName', 'profilePhoto'],
+          )
+        }
+
+        navigate('/DiscordVerification/VerifyResults/success')
+
+      }
+    } catch (error) {
+      console.error("Error in processing authrite request", error)
+      navigate('/DiscordVerification/VerifyResults/error')
+    } finally {
+      setIsLoading(false)
     }
   }, [])
-  
+
   const handleSignIn = async () => {
     const hostname = window.location.hostname
 
@@ -81,39 +107,38 @@ const DiscordVerification = () => {
     console.log(`IS CHECKED STATE changing to: ${newValue}`);
   };
 
-    return (
-        <div className="container">
-          <img src={socialCertLogo} className="main-logo" />
-          <p className="sub-header-text">
-            Certify your identity using your{" "}
-            <FaDiscord style={{ transform: "translateY(.25rem)" }} /> account
-          </p>
-    
-          {isLoading ? (
-            <div className="flex" style={{ alignItems: "center" }}>
-              <span style={{ marginRight: "1rem" }}>{loadingMessage}</span>
-              <LoadingSpinner />
-            </div>
-          ) : (
-            <>
-              <button className="sign-in-button" onClick={handleSignIn}>
-                Sign in with X
-              </button>
-    
-              <div className="checkbox-container">
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={handleCheckboxChange}
-                />
-                <label>Publicly reveal attributes of issued certificates</label>
-              </div>
-            </>
-          )}
-    
-          <NavigateButton navigatePath="/" label={"Go back"} style={{ marginTop: "1rem" }} />
+  return (
+    <div className="container">
+      <img src={socialCertLogo} className="main-logo" />
+      <p className="sub-header-text">
+        Certify your identity using your discord account
+      </p>
+
+      {isLoading ? (
+        <div className="flex" style={{ alignItems: "center" }}>
+          <span style={{ marginRight: "1rem" }}>{loadingMessage}</span>
+          <LoadingSpinner />
         </div>
-      )
+      ) : (
+        <>
+          <button id="discord-cert-button" className="sign-in-button" onClick={handleSignIn}>
+            Sign in with <FaDiscord/>
+          </button>
+
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              checked={isChecked}
+              onChange={handleCheckboxChange}
+            />
+            <label>Publicly reveal attributes of issued certificates</label>
+          </div>
+        </>
+      )}
+
+      <NavigateButton navigatePath="/" label={"Go back"} style={{ marginTop: "1rem" }} />
+    </div>
+  )
 }
 
 export default DiscordVerification

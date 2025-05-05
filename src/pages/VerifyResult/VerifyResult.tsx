@@ -26,6 +26,8 @@ const VerifyResult = ({ certType }: VerifyResultProps) => {
         return "email address"
       case "X":
         return "X account"
+      case "discord":
+        return "Discord account"
     }
   }
 
@@ -36,6 +38,8 @@ const VerifyResult = ({ certType }: VerifyResultProps) => {
       case "email":
         return "/EmailVerification"
       case "X":
+        return "/"
+      case "discord":
         return "/"
     }
   }
