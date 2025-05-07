@@ -25,7 +25,7 @@ const DiscordVerification = () => {
 
   const [isChecked, setIsChecked] = useState<boolean>(() => {
     const savedValue = localStorage.getItem("isChecked");
-    return savedValue === "true" ? true : false;
+    return savedValue === null ? true : savedValue === "true";
   });
 
   useEffect(() => {
