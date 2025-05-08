@@ -11,20 +11,20 @@ import socialCertLogo from "../assets/images/socialCert.svg"
 const Register = () => {
   const navigate = useNavigate()
 
-  const handleDiscordClick = async () => {
-    const hostname = window.location.hostname
+  // const handleDiscordClick = async () => {
+  //   const hostname = window.location.hostname
 
-    if (hostname.includes("staging")) {
-      return (window.location.href =
-        "https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=https%3A%2F%2Fstaging.socialcert.net%2FdiscordVerification&scope=identify")
-    } else if (hostname.includes("localhost")) {
-      return (window.location.href =
-        "https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8088%2FdiscordVerification&scope=identify")
-    } else {
-      return (window.location.href =
-        "https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=https%3A%2F%2Fsocialcert.net%2FdiscordVerification&scope=identify")
-    }
-  }
+  //   if (hostname.includes("staging")) {
+  //     return (window.location.href =
+  //       "https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=https%3A%2F%2Fstaging.socialcert.net%2FdiscordVerification&scope=identify")
+  //   } else if (hostname.includes("localhost")) {
+  //     return (window.location.href =
+  //       "https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8088%2FdiscordVerification&scope=identify")
+  //   } else {
+  //     return (window.location.href =
+  //       "https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=https%3A%2F%2Fsocialcert.net%2FdiscordVerification&scope=identify")
+  //   }
+  // }
 
   return (
     <div className="container">
@@ -48,10 +48,10 @@ const Register = () => {
           <label>Phone Number</label>
         </button> */}
 
-        {/* <button id="discord-cert-button" onClick={handleDiscordClick}>
+        <button id="discord-cert-button" onClick={() => navigate("/discordVerification")}>
           <FaDiscord />
           <label>Discord</label>
-        </button> */}
+        </button>
 
         <button id="x-cert-button" onClick={() => navigate("/XVerification")}>
           <FaXTwitter />

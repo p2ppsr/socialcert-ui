@@ -69,7 +69,6 @@ const XVerification = () => {
         const shouldRevealPublicly = localStorage.getItem("isChecked") === "true";
 
         if (shouldRevealPublicly) {
-          console.log('INSIDE IF STATEMENT')
           const publicationResult = await new IdentityClient(new WalletClient()).publiclyRevealAttributes(
             newCertificate,
             ['userName', 'profilePhoto'],
