@@ -1,78 +1,64 @@
-name: Deployment
+name: Deploy
 on:
   push:
-    branches:
-      - master
-      - production
+    branches: [ master, production ]
 
-# ────────── global constants ───────────────────────────────────────────────
 env:
-  CURRENT_BRANCH: ${{ github.ref_name }}
-  GCR_HOST: us.gcr.io
+  # ---------- constants ----------------------------------------------------
+  GCR_HOST:         us.gcr.io
   GOOGLE_PROJECT_ID: babbage-private
-  GCR_IMAGE_NAME: socialcert-ui
+  GCR_IMAGE_NAME:   socialcert-ui
+  CURRENT_BRANCH:   ${{ github.ref_name }}
+
+permissions:          # required for Workload‑Identity Federation
+  contents: read
+  id-token: write
 
 jobs:
-  build-and-deploy:
-    name: Build-&-Deploy to Cloud Run
+  deploy:
     runs-on: ubuntu-latest
 
-    # Needed for google-github-actions/auth when using Workload Identity
-    permissions:
-      contents: read
-      id-token: write
-
     steps:
-    # ──────── 1. Source & toolchain ────────────────────────────────────────
-    - name: Checkout source
-      uses: actions/checkout@v4
+    # ── 1. Source + build ---------------------------------------------------
+    - uses: actions/checkout@v4
 
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: 16
+    - uses: actions/setup-node@v4
+      with: { node-version: 22 }
 
     - name: Install deps & build
       run: |
         npm ci
-        CI=true npm run build
+        CI=true npm run build       # static React bundle
 
-    # ──────── 2. Authenticate for docker push ──────────────────────────────
-    - name: Auth (push to Container Registry)
-      id: auth-push
-      uses: google-github-actions/auth@v1
-      with:
-        credentials_json: ${{ secrets.DOCKER_REGISTRY_PUSH_KEY }}
-
-    # ──────── 3. Build & push image ────────────────────────────────────────
-    - name: Build and push Docker image
-      id: build
-      env:
-        IMAGE_TAGS: |
-          latest
-          ${{ env.CURRENT_BRANCH }}-${{ github.sha }}
-      run: |
-        set -e
-        for TAG in $IMAGE_TAGS; do
-          IMAGE_URI=${{ env.GCR_HOST }}/${{ env.GOOGLE_PROJECT_ID }}/${{ env.GCR_IMAGE_NAME }}:${TAG}
-          echo "Building $IMAGE_URI"
-          docker build -t "$IMAGE_URI" .
-          docker push  "$IMAGE_URI"
-        done
-        echo "IMAGE_URI=${{ env.GCR_HOST }}/${{ env.GOOGLE_PROJECT_ID }}/${{ env.GCR_IMAGE_NAME }}:${{ env.CURRENT_BRANCH }}-${{ github.sha }}" >> "$GITHUB_OUTPUT"
-
-    # ──────── 4. Authenticate for deployment ───────────────────────────────
-    - name: Auth (deploy to Cloud Run)
-      id: auth-deploy
+    # ── 2. Authenticate & let Docker use the creds -------------------------
+    - name: Google Cloud auth
       uses: google-github-actions/auth@v1
       with:
         credentials_json: ${{ secrets.GCP_DEPLOY_CREDS }}
 
-    # ──────── 5. Deploy to Cloud Run ───────────────────────────────────────
-    - name: Deploy to Cloud Run
+    - name: Configure Docker for GCR
+      run: gcloud --quiet auth configure-docker ${{ env.GCR_HOST }}
+
+    # ── 3. Build + push image ---------------------------------------------
+    - name: Build & push Docker image
+      id: build
+      env:
+        IMAGE_BASENAME: ${{ env.GCR_HOST }}/${{ env.GOOGLE_PROJECT_ID }}/${{ env.GCR_IMAGE_NAME }}
+      run: |
+        set -e
+        for TAG in latest ${{ env.CURRENT_BRANCH }}-${{ github.sha }}; do
+          IMAGE_URI=${IMAGE_BASENAME}:$TAG
+          echo "▶ Building $IMAGE_URI"
+          docker build -t "$IMAGE_URI" .
+          docker push  "$IMAGE_URI"
+        done
+        echo "IMAGE_URI=${IMAGE_BASENAME}:${{ env.CURRENT_BRANCH }}-${{ github.sha }}" >> "$GITHUB_OUTPUT"
+
+    # ── 4. Deploy to Cloud Run --------------------------------------------
+    - name: Deploy
       uses: google-github-actions/deploy-cloudrun@v1
       with:
         service: ${{ env.GCR_IMAGE_NAME }}-${{ env.CURRENT_BRANCH }}
         image:   ${{ steps.build.outputs.IMAGE_URI }}
-        region:  us-west1              # adjust if your service lives elsewhere
+        region:  us-west1
         timeout: 3540
