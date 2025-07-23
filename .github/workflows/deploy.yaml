@@ -5,6 +5,7 @@ on:
       - master
       - production
 
+# ────────── global constants ───────────────────────────────────────────────
 env:
   CURRENT_BRANCH: ${{ github.ref_name }}
   GCR_HOST: us.gcr.io
@@ -12,28 +13,66 @@ env:
   GCR_IMAGE_NAME: socialcert-ui
 
 jobs:
-  build:
-    name: Deploy
+  build-and-deploy:
+    name: Build-&-Deploy to Cloud Run
     runs-on: ubuntu-latest
+
+    # Needed for google-github-actions/auth when using Workload Identity
+    permissions:
+      contents: read
+      id-token: write
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: npm ci
-      - run: CI=true npm run build
-      - uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_DEPLOY_CREDS }}
-      - uses: RafikFarhad/push-to-gcr-github-action@v5-rc1
-        with:
-          gcloud_service_key: ${{ secrets.DOCKER_REGISTRY_PUSH_KEY }}
-          registry: ${{ env.GCR_HOST }}
-          project_id: ${{ env.GOOGLE_PROJECT_ID }}
-          image_name: ${{ env.GCR_IMAGE_NAME }}
-          image_tag: ${{ env.CURRENT_BRANCH }}-${{ github.sha }}
-      - uses: google-github-actions/deploy-cloudrun@v0
-        with:
-          service: ${{ env.GCR_IMAGE_NAME }}-${{ env.CURRENT_BRANCH }}
-          image: "${{ env.GCR_HOST }}/${{ env.GOOGLE_PROJECT_ID }}/${{ env.GCR_IMAGE_NAME }}:${{ env.CURRENT_BRANCH }}-${{ github.sha }}"
-          timeout: 3540
+    # ──────── 1. Source & toolchain ────────────────────────────────────────
+    - name: Checkout source
+      uses: actions/checkout@v4
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 16
+
+    - name: Install deps & build
+      run: |
+        npm ci
+        CI=true npm run build
+
+    # ──────── 2. Authenticate for docker push ──────────────────────────────
+    - name: Auth (push to Container Registry)
+      id: auth-push
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.DOCKER_REGISTRY_PUSH_KEY }}
+
+    # ──────── 3. Build & push image ────────────────────────────────────────
+    - name: Build and push Docker image
+      id: build
+      env:
+        IMAGE_TAGS: |
+          latest
+          ${{ env.CURRENT_BRANCH }}-${{ github.sha }}
+      run: |
+        set -e
+        for TAG in $IMAGE_TAGS; do
+          IMAGE_URI=${{ env.GCR_HOST }}/${{ env.GOOGLE_PROJECT_ID }}/${{ env.GCR_IMAGE_NAME }}:${TAG}
+          echo "Building $IMAGE_URI"
+          docker build -t "$IMAGE_URI" .
+          docker push  "$IMAGE_URI"
+        done
+        echo "IMAGE_URI=${{ env.GCR_HOST }}/${{ env.GOOGLE_PROJECT_ID }}/${{ env.GCR_IMAGE_NAME }}:${{ env.CURRENT_BRANCH }}-${{ github.sha }}" >> "$GITHUB_OUTPUT"
+
+    # ──────── 4. Authenticate for deployment ───────────────────────────────
+    - name: Auth (deploy to Cloud Run)
+      id: auth-deploy
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCP_DEPLOY_CREDS }}
+
+    # ──────── 5. Deploy to Cloud Run ───────────────────────────────────────
+    - name: Deploy to Cloud Run
+      uses: google-github-actions/deploy-cloudrun@v1
+      with:
+        service: ${{ env.GCR_IMAGE_NAME }}-${{ env.CURRENT_BRANCH }}
+        image:   ${{ steps.build.outputs.IMAGE_URI }}
+        region:  us-west1              # adjust if your service lives elsewhere
+        timeout: 3540
