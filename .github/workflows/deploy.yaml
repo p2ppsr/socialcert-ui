@@ -3,59 +3,72 @@ on:
   push:
     branches: [ master, production ]
 
+# ------------ constants ---------------------------
 env:
-  # ---------- constants ----------------------------------------------------
-  GCR_HOST:         us.gcr.io
+  GCR_HOST:          gcr.io
   GOOGLE_PROJECT_ID: babbage-private
-  GCR_IMAGE_NAME:   socialcert-ui
-  CURRENT_BRANCH:   ${{ github.ref_name }}
+  GCR_IMAGE_NAME:    socialcert-ui
 
 permissions:          # required for Workload‑Identity Federation
   contents: read
   id-token: write
 
 jobs:
-  deploy:
+  build-and-deploy:
+    name: Build → Push → Deploy
     runs-on: ubuntu-latest
 
+    # ------------ values that depend on the branch ------------------------
+    env:
+      CURRENT_BRANCH: ${{ github.ref_name == 'production' && 'production' || 'master' }}
+
     steps:
-    # ── 1. Source + build ---------------------------------------------------
+    # ───── 1. Checkout & toolchain ─────────────────────────────────────────
     - uses: actions/checkout@v4
 
     - uses: actions/setup-node@v4
-      with: { node-version: 22 }
+      with:
+        node-version: 16            # keep socialcert’s Node requirement
 
-    - name: Install deps & build
+    - name: Install deps & build React bundle
       run: |
         npm ci
-        CI=true npm run build       # static React bundle
+        CI=true npm run build
 
-    # ── 2. Authenticate & let Docker use the creds -------------------------
-    - name: Google Cloud auth
+    # ───── 2. Authenticate (push) & let Docker use the creds ──────────────
+    - name: Auth (push)
       uses: google-github-actions/auth@v1
       with:
-        credentials_json: ${{ secrets.GCP_DEPLOY_CREDS }}
+        credentials_json: ${{ secrets.DOCKER_REGISTRY_PUSH_KEY }}
 
-    - name: Configure Docker for GCR
+    - name: Configure Docker for gcr.io
       run: gcloud --quiet auth configure-docker ${{ env.GCR_HOST }}
 
-    # ── 3. Build + push image ---------------------------------------------
-    - name: Build & push Docker image
-      id: build
+    # ───── 3. Build & push image ───────────────────────────────────────────
+    - name: Build and push image
+      id: build                                  # exposes steps.build.outputs.IMAGE_URI
       env:
-        IMAGE_BASENAME: ${{ env.GCR_HOST }}/${{ env.GOOGLE_PROJECT_ID }}/${{ env.GCR_IMAGE_NAME }}
+        IMAGE_TAGS: |
+          latest
+          ${{ env.CURRENT_BRANCH }}-${{ github.sha }}
       run: |
         set -e
-        for TAG in latest ${{ env.CURRENT_BRANCH }}-${{ github.sha }}; do
-          IMAGE_URI=${IMAGE_BASENAME}:$TAG
+        for TAG in $IMAGE_TAGS; do
+          IMAGE_URI=${{ env.GCR_HOST }}/${{ env.GOOGLE_PROJECT_ID }}/${{ env.GCR_IMAGE_NAME }}:${TAG}
           echo "▶ Building $IMAGE_URI"
           docker build -t "$IMAGE_URI" .
           docker push  "$IMAGE_URI"
         done
-        echo "IMAGE_URI=${IMAGE_BASENAME}:${{ env.CURRENT_BRANCH }}-${{ github.sha }}" >> "$GITHUB_OUTPUT"
+        echo "IMAGE_URI=${{ env.GCR_HOST }}/${{ env.GOOGLE_PROJECT_ID }}/${{ env.GCR_IMAGE_NAME }}:${{ env.CURRENT_BRANCH }}-${{ github.sha }}" >> "$GITHUB_OUTPUT"
 
-    # ── 4. Deploy to Cloud Run --------------------------------------------
-    - name: Deploy
+    # ───── 4. Authenticate (deploy) ────────────────────────────────────────
+    - name: Auth (deploy)
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCP_DEPLOY_CREDS }}
+
+    # ───── 5. Deploy to Cloud Run ──────────────────────────────────────────
+    - name: Deploy to Cloud Run
       uses: google-github-actions/deploy-cloudrun@v1
       with:
         service: ${{ env.GCR_IMAGE_NAME }}-${{ env.CURRENT_BRANCH }}
