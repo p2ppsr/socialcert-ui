@@ -28,7 +28,7 @@ jobs:
 
     - uses: actions/setup-node@v4
       with:
-        node-version: 16            # keep socialcert’s Node requirement
+        node-version: 22
 
     - name: Install deps & build React bundle
       run: |
@@ -73,5 +73,5 @@ jobs:
       with:
         service: ${{ env.GCR_IMAGE_NAME }}-${{ env.CURRENT_BRANCH }}
         image:   ${{ steps.build.outputs.IMAGE_URI }}
-        region:  us-west1
+        region:  us-central1
         timeout: 3540
