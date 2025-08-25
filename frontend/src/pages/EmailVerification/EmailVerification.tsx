@@ -32,7 +32,7 @@ const EmailVerification = () => {
   )
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState(false)
-  const [isChecked, setIsChecked] = useState(false)
+  const [isChecked, setIsChecked] = useState(true)
 
 
   // Effects ====================================================================
@@ -119,14 +119,14 @@ const EmailVerification = () => {
       const responseData = await response.json()
       if (responseData.verificationStatus) {
         const newCertificate = await acquireEmailCertificate(responseData.certType, data.verifyEmail)
-        if(isChecked){
-        const publicationResult = await new IdentityClient(new WalletClient()).publiclyRevealAttributes(
-          newCertificate,
-          ['email'],
-        )
-        console.log('PUBLIC REVELATION RESULT:', publicationResult)
-      }
-      navigate("/EmailVerification/VerifyResult/success")
+        if (isChecked) {
+          const publicationResult = await new IdentityClient(new WalletClient()).publiclyRevealAttributes(
+            newCertificate,
+            ['email'],
+          )
+          console.log('PUBLIC REVELATION RESULT:', publicationResult)
+        }
+        navigate("/EmailVerification/VerifyResult/success")
       } else {
         if (verificationAttempts === 1) {
           setLocked(true)
@@ -179,7 +179,7 @@ const EmailVerification = () => {
           {!valid && (
             <b style={{ color: "tomato" }}>A valid email is required</b>
           )}
-          <div className="checkbox-container" style={{ paddingTop: "0.5rem" }}> 
+          <div className="checkbox-container" style={{ paddingTop: "0.5rem" }}>
             <input
               type="checkbox"
               checked={isChecked}
@@ -236,7 +236,7 @@ const EmailVerification = () => {
                 Haven't received an email in 1-2 mins? <br />
                 Make sure your email is correct above, then <br />
                 <a
-                  className="request-new-code-link" 
+                  className="request-new-code-link"
                   onClick={async () => {
                     try {
                       await sendVerificationEmail(sentEmail)

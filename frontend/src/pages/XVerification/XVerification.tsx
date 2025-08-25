@@ -25,11 +25,11 @@ const XVerification = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState("Processing...");
 
-  
+
   // Initialize isChecked from localStorage if it exists, otherwise default to false
   const [isChecked, setIsChecked] = useState<boolean>(() => {
     const savedValue = localStorage.getItem("isChecked");
-    return savedValue === "true" ? true : false;
+    return savedValue === null ? true : savedValue === "true";
   });
 
   // Store isChecked state in localStorage whenever it changes
@@ -45,7 +45,7 @@ const XVerification = () => {
         setIsLoading(true)
 
         const data = { oauthToken, oauthVerifier, funcAction: "getUserInfo" }
-          
+
         const response = await new AuthFetch(clientWallet).fetch(getBackendUrl("X"), {
           method: "POST",
           headers: {
@@ -64,17 +64,17 @@ const XVerification = () => {
             profilePhoto: userData.profilePhoto,
           }
         })
-        
+
         // Get the current value from localStorage to ensure it's the most up-to-date
         const shouldRevealPublicly = localStorage.getItem("isChecked") === "true";
-        
+
         if (shouldRevealPublicly) {
           const publicationResult = await new IdentityClient(new WalletClient()).publiclyRevealAttributes(
             newCertificate,
             ['userName', 'profilePhoto'],
           )
         }
-        
+
         navigate('/XVerification/VerifyResult/success')
       }
     } catch (error) {
@@ -92,7 +92,7 @@ const XVerification = () => {
       console.log("ON X PAGE")
       // Ensure the current checkbox state is saved before redirecting
       localStorage.setItem("isChecked", isChecked.toString());
-      
+
       const data = { funcAction: "makeRequest", hostURL: hostname }
       const response = await new AuthFetch(clientWallet).fetch(getBackendUrl("X"), {
         method: "POST",
