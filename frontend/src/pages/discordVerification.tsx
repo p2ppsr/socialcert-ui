@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import getConstants from '../utils/getConstants'
-import { WalletClient, AuthFetch, AcquireCertificateResult, IdentityClient } from "@bsv/sdk"
-import useStyles from './register-style'
+import { WalletClient, AuthFetch, IdentityClient } from "@bsv/sdk"
 import { useAsyncEffect } from "use-async-effect"
-import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner"
 import { getBackendUrl, getBaseUrl } from "../utils/getBackendUrl"
-import socialCertLogo from "../assets/images/socialCert.svg"
 import { FaDiscord } from "react-icons/fa"
-import NavigateButton from "../components/NavigateButton"
-
+import VerificationLayout from "../components/Layout/VerificationLayout"
+import Button from "../components/ui/Button"
 
 const clientWallet = new WalletClient('json-api', 'localhost')
 
 const DiscordVerification = () => {
-  const [progressStatus, setProgressStatus] = useState('')
-  const [successStatus, setSuccessStatus] = useState(false)
   const constants = getConstants()
   const navigate = useNavigate()
-  const classes = useStyles()
   const [isLoading, setIsLoading] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState("Processing...");
 
@@ -108,36 +102,39 @@ const DiscordVerification = () => {
   };
 
   return (
-    <div className="container">
-      <img src={socialCertLogo} className="main-logo" />
-      <p className="sub-header-text">
-        Certify your identity using your discord account
-      </p>
-
+    <VerificationLayout
+      title="Discord"
+      subtitle="Certify your identity using your Discord account"
+      icon={<FaDiscord />}
+      iconBgColor="rgb(51, 73, 189)"
+    >
       {isLoading ? (
-        <div className="flex" style={{ alignItems: "center" }}>
-          <span style={{ marginRight: "1rem" }}>{loadingMessage}</span>
-          <LoadingSpinner />
+        <div className="flex items-center justify-center gap-3 py-6">
+          <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          <span className="text-white">{loadingMessage}</span>
         </div>
       ) : (
         <>
-          <button id="discord-cert-button" className="sign-in-button" onClick={handleSignIn}>
-            Sign in with <FaDiscord />
+          <button
+            onClick={handleSignIn}
+            className="flex items-center justify-center gap-2 w-full px-5 py-3 text-white font-semibold border border-white rounded transition-all hover:shadow-[3px_3px_0_white] hover:-translate-y-0.5 mb-4"
+            style={{ backgroundColor: 'rgb(51, 73, 189)' }}
+          >
+            Sign in with <FaDiscord size={20} />
           </button>
 
-          <div className="checkbox-container">
+          <div className="flex items-center gap-2 text-white text-sm">
             <input
               type="checkbox"
               checked={isChecked}
               onChange={handleCheckboxChange}
+              className="w-4 h-4 accent-[#00ff9f]"
             />
             <label>Publicly reveal attributes of issued certificates</label>
           </div>
         </>
       )}
-
-      <NavigateButton navigatePath="/" label={"Go back"} style={{ marginTop: "1rem" }} />
-    </div>
+    </VerificationLayout>
   )
 }
 

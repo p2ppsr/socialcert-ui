@@ -35,7 +35,7 @@ const Register = () => {
         </div>
       </div>
       <p style={{ marginBottom: "2rem" }}>
-        Access the MetaNet using your own certified identity{" "}
+        Access the Metanet using your own certified identity{" "}
       </p>
 
       <h3>Choose your desired identity certification</h3>

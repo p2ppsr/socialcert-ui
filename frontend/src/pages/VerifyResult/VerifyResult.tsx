@@ -1,84 +1,93 @@
-// VerifyResult component
 import { useNavigate, useParams } from "react-router-dom"
-import errorIcon from "../../assets/images/errorIcon.webp"
 import socialCertLogo from "../../assets/images/socialCert.svg"
+import socialCertBackground from "../../assets/images/socialCertBackground.png"
 import successIcon from "../../assets/images/successIcon.webp"
-
-import NavigateButton from "../../components/NavigateButton"
-import "./VerifyResult.scss"
-
-/* 
-  The success or failure contents are determined by the `status` parameter in the URL (see routes in App.tsx)
-  It conditionally renders either the success page or failure page.
-  The text on the page is determined by prop `certType: string` passed to the component
-*/
+import errorIcon from "../../assets/images/errorIcon.webp"
 
 interface VerifyResultProps {
   certType: string
 }
 
 const VerifyResult = ({ certType }: VerifyResultProps) => {
+  const { status } = useParams<{ status: string }>()
+  const navigate = useNavigate()
+
   const getCertNameText = () => {
     switch (certType) {
-      case "phone":
-        return "phone number"
-      case "email":
-        return "email address"
-      case "X":
-        return "X account"
-      case "discord":
-        return "Discord account"
+      case "phone": return "phone number"
+      case "email": return "email address"
+      case "X": return "X account"
+      case "discord": return "Discord account"
+      default: return "account"
     }
   }
 
   const getGoBackPath = () => {
     switch (certType) {
-      case "phone":
-        return "/PhoneVerification"
-      case "email":
-        return "/EmailVerification"
-      case "X":
-        return "/"
-      case "discord":
-        return "/"
+      case "phone": return "/PhoneVerification"
+      case "email": return "/EmailVerification"
+      case "X": return "/XVerification"
+      case "discord": return "/discordVerification"
+      default: return "/"
     }
   }
 
-  // Access url param to determine whether to show success or error elements; see App.tsx route for this page
-  const { status } = useParams<{ status: string }>()
-  const navigate = useNavigate()
+  const isSuccess = status === "success"
 
   return (
-    <div className="container result-page-container">
-      {/* Success page contents */}
-      <img src={socialCertLogo} className="main-logo" />
-      {status === "success" ? (
-        <>
-          <img src={successIcon} className="result-icon" />
-          <h1>Verification Success!</h1>
-          <p>Your {getCertNameText()} certificate has been issued.</p>
+    <div className="min-h-screen flex flex-col items-center justify-center" style={{ fontFamily: 'Comfortaa, system-ui, sans-serif' }}>
+      {/* Background Image */}
+      <img
+        src={socialCertBackground}
+        alt=""
+        className="fixed inset-0 w-full h-full object-cover -z-10"
+      />
+
+      <main className="flex flex-col items-center justify-center px-4 py-12 text-center">
+        {/* Logo */}
+        <img
+          src={socialCertLogo}
+          alt="SocialCert"
+          className="w-[400px] max-w-[80vw] brightness-[100] mb-6"
+        />
+
+        {/* Result Icon */}
+        <img
+          src={isSuccess ? successIcon : errorIcon}
+          alt={isSuccess ? "Success" : "Error"}
+          className="w-24 h-24 mb-4"
+        />
+
+        {/* Title */}
+        <h1 className="text-2xl text-white font-bold mb-2">
+          {isSuccess ? 'Verification Success!' : 'Failed to Verify.'}
+        </h1>
+
+        {/* Message */}
+        <p className="text-white mb-6">
+          {isSuccess
+            ? `Your ${getCertNameText()} certificate has been issued.`
+            : `Your ${getCertNameText()} has failed to verify. Please go back and try again.`
+          }
+        </p>
+
+        {/* Actions */}
+        {isSuccess ? (
           <button
-            style={{ background: "transparent" }}
-            onClick={() => {
-              navigate("/")
-            }}
+            onClick={() => navigate("/")}
+            className="px-6 py-2 text-white border border-white rounded bg-transparent hover:shadow-[3px_3px_0_white] transition-all"
           >
             Return to Landing Page
           </button>
-        </>
-      ) : (
-        // Failure page contents
-        <>
-          <img src={errorIcon} className="result-icon" />
-          <h1>Failed to Verify.</h1>
-          <p>
-            {/* {getCertNameText() !== "" ? <></> : <></>} */}
-            Your {getCertNameText()} has failed to verify. <br />
-            Please go back and try again.
-          </p>
-          <NavigateButton navigatePath={getGoBackPath()} label={"Go back"} />
-        </>
-      )}
+        ) : (
+          <button
+            onClick={() => navigate(getGoBackPath())}
+            className="px-6 py-2 text-white border border-white rounded bg-transparent hover:shadow-[3px_3px_0_white] transition-all"
+          >
+            Go back
+          </button>
+        )}
+      </main>
     </div>
   )
 }

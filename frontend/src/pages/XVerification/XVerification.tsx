@@ -3,11 +3,10 @@ import { useNavigate } from "react-router-dom"
 import { getBackendUrl, getBaseUrl } from "../../utils/getBackendUrl"
 import getConstants from "../../utils/getConstants"
 import { useAsyncEffect } from "use-async-effect"
-import socialCertLogo from "../../assets/images/socialCert.svg"
-import NavigateButton from "../../components/NavigateButton"
 import { FaXTwitter } from "react-icons/fa6"
-import { WalletClient, AuthFetch, AcquireCertificateResult, IdentityClient } from "@bsv/sdk"
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
+import { WalletClient, AuthFetch, IdentityClient } from "@bsv/sdk"
+import VerificationLayout from "../../components/Layout/VerificationLayout"
+import Button from "../../components/ui/Button"
 
 const clientWallet = new WalletClient('json-api', 'localhost')
 
@@ -118,37 +117,38 @@ const XVerification = () => {
   };
 
   return (
-    <div className="container">
-      <img src={socialCertLogo} className="main-logo" />
-      <p className="sub-header-text">
-        Certify your identity using your{" "}
-        <FaXTwitter style={{ transform: "translateY(.25rem)" }} /> account
-      </p>
-
+    <VerificationLayout
+      title="X"
+      subtitle="Certify your identity using your X account"
+      icon={<FaXTwitter />}
+      iconBgColor="#000"
+    >
       {isLoading ? (
-        <div className="flex" style={{ alignItems: "center" }}>
-          <span style={{ marginRight: "1rem" }}>{loadingMessage}</span>
-          <LoadingSpinner />
+        <div className="flex items-center justify-center gap-3 py-6">
+          <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          <span className="text-white">{loadingMessage}</span>
         </div>
       ) : (
         <>
-          <button className="sign-in-button" onClick={handleSignIn}>
+          <button
+            onClick={handleSignIn}
+            className="flex items-center justify-center gap-2 w-full px-5 py-3 text-white font-semibold border border-white rounded transition-all hover:shadow-[3px_3px_0_white] hover:-translate-y-0.5 mb-4 bg-black"
+          >
             Sign in with X
           </button>
 
-          <div className="checkbox-container">
+          <div className="flex items-center gap-2 text-white text-sm">
             <input
               type="checkbox"
               checked={isChecked}
               onChange={handleCheckboxChange}
+              className="w-4 h-4 accent-[#00ff9f]"
             />
             <label>Publicly reveal attributes of issued certificates</label>
           </div>
         </>
       )}
-
-      <NavigateButton navigatePath="/" label={"Go back"} style={{ marginTop: "1rem" }} />
-    </div>
+    </VerificationLayout>
   )
 }
 

@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import socialCertLogo from "../../assets/images/socialCert.svg"
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
-import NavigateButton from "../../components/NavigateButton"
+import { IoIosMail } from "react-icons/io"
+import VerificationLayout from "../../components/Layout/VerificationLayout"
+import Button from "../../components/ui/Button"
 import VerifyCodeInput from "../../components/VerifyCodeInput/VerifyCodeInput"
-import { getBackendUrl } from "../../utils/getBackendUrl"
-import getConstants from "../../utils/getConstants"
-import "./EmailVerification.scss"
 import { sendVerificationEmail, acquireEmailCertificate } from "./utils/emailUtils"
 import { toast } from "react-toastify"
 import { WalletClient, AuthFetch, IdentityClient } from "@bsv/sdk"
 
 const EmailVerification = () => {
-  // Constructors ======================================================================
-  const constants = getConstants()
   const navigate = useNavigate()
 
   // State =======================================================================
@@ -150,154 +145,100 @@ const EmailVerification = () => {
   }
 
   return (
-    <div className="container">
-      <img
-        src={socialCertLogo}
-        alt="Social Certification Logo"
-        className="main-logo"
-      />
-      <p className="sub-header-text">
-        Certify your identity using your email address
-      </p>
-
-      {!hasSubmitted && (
+    <VerificationLayout
+      title="Email"
+      subtitle="Certify your identity using your email address"
+      icon={<IoIosMail />}
+      iconBgColor="rgb(97, 97, 97)"
+    >
+      {!hasSubmitted ? (
         <>
-          <div style={{ textAlign: "center", maxWidth: "25rem" }}>
-            <p>We'll send you an email to verify.</p>
-          </div>
-          <form onSubmit={handleEmailSubmit}>
-            <div className="flex-wrap">
-              <input
-                type="email"
-                name="emailField"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="email-input"
-                placeholder="janedoe@email.com"
-                autoComplete="email"
-                inputMode="email"
-                enterKeyHint="send"
-                required
-              />
-              <button
-                type="submit"
-                className="fancy-button"
-                disabled={isSubmitting || !email}
-              >
-                {isSubmitting ? (
-                  <>
-                    <span className="btn-spinner" aria-hidden="true" />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M3 12H19M19 12L13 6M19 12L13 18"
-                        stroke="white"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    Send code
-                  </>
-                )}
-              </button>
-            </div>
+          <p className="text-white text-center mb-4">We'll send you an email to verify.</p>
+
+          <form onSubmit={handleEmailSubmit} className="flex flex-wrap justify-center gap-3 mb-4">
+            <input
+              type="email"
+              name="emailField"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="flex-1 min-w-[200px] px-4 py-2 bg-white/10 border-none rounded text-white placeholder-white/50"
+              placeholder="janedoe@email.com"
+              autoComplete="email"
+              inputMode="email"
+              enterKeyHint="send"
+              required
+            />
+            <button
+              type="submit"
+              disabled={isSubmitting || !email}
+              className="px-4 py-2 bg-[rgb(49,147,83)] text-white border border-white rounded transition-all hover:shadow-[3px_3px_0_white] disabled:opacity-50"
+            >
+              {isSubmitting ? 'Sending...' : '→ Send code'}
+            </button>
           </form>
+
           {!valid && (
-            <b style={{ color: "tomato" }}>A valid email is required</b>
+            <p className="text-red-400 text-sm text-center mb-4">A valid email is required</p>
           )}
-          <div className="checkbox-container" style={{ paddingTop: "0.5rem" }}>
+
+          <div className="flex items-center gap-2 text-white text-sm">
             <input
               type="checkbox"
               checked={isChecked}
               onChange={() => setIsChecked(!isChecked)}
+              className="w-4 h-4 accent-[#00ff9f]"
             />
             <label>Publicly reveal attributes of issued certificates</label>
           </div>
         </>
-      )}
-
-      {/* Text + spinner when the user has submitted their email */}
-      {isSubmitting && (
+      ) : (
         <>
-          <div className="flex" style={{ alignItems: "center" }}>
-            <p>Checking verification status...</p>
-            <LoadingSpinner />
-          </div>
-        </>
-      )}
+          <p className="text-white text-center mb-4">
+            Please enter the 6 digit code sent to <strong>{email}</strong>
+          </p>
 
-      {/* Enter verification page. TODO: This should be its own component-- see src/pages/PhoneVerification/EnterPhoneCode.tsx */}
-      {hasSubmitted && (
-        <>
           <form onSubmit={handleVerificationSubmit}>
-            <div style={{ display: "block", margin: "auto" }}>
-              <p>
-                Please enter the 6 digit code sent to <b>{email}</b>
-              </p>
-              <VerifyCodeInput
-                onChange={setVerificationCode}
-                handleSubmit={handleVerificationSubmit}
-              />
-            </div>
+            <VerifyCodeInput
+              onChange={setVerificationCode}
+              handleSubmit={handleVerificationSubmit}
+            />
           </form>
-          {verificationSubmitted && locked && (
-            <p>You must wait 10 minutes before trying again.</p>
-          )}
-          {verificationSubmitted && !locked && (
-            <p>Remaining attempts until lock out: {verificationAttempts}</p>
-          )}
 
           {verificationSubmitted && (
-            <>
-              <div className="flex" style={{ alignItems: "center" }}>
-                <p>Checking verification code...</p>
-                <LoadingSpinner />
-              </div>
-            </>
+            <div className="flex items-center justify-center gap-3 py-4">
+              <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <span className="text-white">Checking verification code...</span>
+            </div>
           )}
 
-          {verificationSubmitted && (
-            <>
-              <p style={{ textAlign: "center" }}>
-                Haven't received an email in 1-2 mins? <br />
-                Make sure your email is correct above, then <br />
-                <a
-                  className="request-new-code-link"
-                  onClick={async () => {
-                    try {
-                      await sendVerificationEmail(sentEmail)
-                      toast.success("A new code has been sent to your email.")
-                    } catch (e) {
-                      toast.error(
-                        `There was an error resending a code to your email: ${e}`
-                      )
-                    }
-                  }}
-                >
-                  request a new code
-                </a>
-              </p>
-            </>
+          {locked && (
+            <p className="text-white text-center mt-4">You must wait 10 minutes before trying again.</p>
           )}
+
+          {!locked && verificationAttempts < 5 && (
+            <p className="text-white text-center mt-4">Remaining attempts until lock out: {verificationAttempts}</p>
+          )}
+
+          <p className="text-white text-center mt-6 text-sm">
+            Haven't received an email in 1-2 mins?<br />
+            Make sure your email is correct above, then{' '}
+            <a
+              className="text-[rgb(114,159,255)] underline cursor-pointer"
+              onClick={async () => {
+                try {
+                  await sendVerificationEmail(sentEmail)
+                  toast.success("A new code has been sent to your email.")
+                } catch (e) {
+                  toast.error(`Error resending code: ${e}`)
+                }
+              }}
+            >
+              request a new code
+            </a>
+          </p>
         </>
       )}
-      {/* <p style={{ margin: "0" }}>Wrong email?</p> */}
-      <NavigateButton
-        navigatePath="/"
-        label="Go back"
-        style={{ marginTop: "4rem" }}
-      />
-    </div>
+    </VerificationLayout>
   )
 }
 
