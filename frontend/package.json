@@ -7,7 +7,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@bsv/sdk": "^1.10.1",
+    "@bsv/sdk": "^2.4.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.6",
     "@mui/styles": "^5.13.2",
@@ -35,5 +35,8 @@
     "sass": "^1.75.0",
     "typescript": "^5.4.5",
     "vite": "^7.3.1"
+  },
+  "overrides": {
+    "@bsv/sdk": "$@bsv/sdk"
   }
 }
