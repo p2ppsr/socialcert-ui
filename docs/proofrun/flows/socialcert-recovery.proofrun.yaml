@@ -1,0 +1,109 @@
+proofrunVersion: 1
+id: socialcert-recovery
+name: Interrupted issuance and publication recover without false success
+surface:
+  repo: p2ppsr/socialcert-ui
+  category: recovery
+  audience: First-time account holder with an approved disposable fixture wallet
+environment:
+  kind: local-fixture
+  baseUrl: http://127.0.0.1:8088
+  deployment:
+    system: local
+    releaseSource: Record candidate UI/backend source revisions and built artifact digests before execution.
+safety:
+  stateChanging: true
+  spendCap:
+    amount: 0
+    unit: USD
+  testIdentities:
+    - purpose: Isolated fixture-only wallet, mailbox/provider subject and feedback record
+      source: Controlled test harness; no customer or personal accounts and no secrets in YAML.
+  cleanup:
+    required: true
+    instructions: Verify per-case fixture/profile reset and receipt cleanup; never promise removal of
+      real public chain/overlay data.
+matrix:
+  desktopBrowsers:
+    - chromium
+  mobileBrowsers: []
+  mobileSimulators: []
+  desktopWallets: []
+  mobileWallets: []
+  serverWallets: []
+  networks:
+    - local-fixture
+preflight:
+  commands: []
+  requiredState:
+    - NOT RUN; no passing run record exists.
+    - "Executable definition: docs/proofrun/workflows/socialcert-recovery.v1.proofrun.yaml"
+    - Dedicated isolated fixture and mandatory domain oracle plugins registered; block admission if
+      any prerequisite is absent.
+    - Exact source/build and initial wallet permission baseline pinned; no external
+      provider/model/spending allocation permitted.
+flow:
+  steps:
+    - id: acquisition-failure
+      actor: target-user
+      action: Use verified-email fixture with wallet acquisition denial/error; inspect flow-status and
+        direct result navigation.
+      expected:
+        ui:
+          - No certificate-receipt or issued claim is fabricated; retry-issuance is available only
+            with eligible verification.
+        domain:
+          - Independent oracle socialcert.no-false-success passes with redacted retained evidence.
+          - Independent oracle socialcert.terminal-state passes with redacted retained evidence.
+    - id: retry
+      actor: target-user
+      action: Retry acquisition once with the controlled recovered wallet fixture; double-click or refresh
+        only inside this isolated local harness.
+      expected:
+        ui:
+          - At most one intended acquisition completes; terminal receipt and state agree.
+        domain:
+          - Independent oracle socialcert.certificate-possession passes with redacted retained
+            evidence.
+          - Independent oracle socialcert.at-most-once-effects passes with redacted retained
+            evidence.
+    - id: interruption
+      actor: target-user
+      action: Repeat with declared pending/back/refresh and expired-verification fixtures; resume through
+        visible recovery actions.
+      expected:
+        ui:
+          - Each stage terminates honestly; stale verification restarts the provider/challenge flow
+            instead of claiming success.
+        domain:
+          - Independent oracle socialcert.terminal-state passes with redacted retained evidence.
+          - Independent oracle socialcert.invalid-verification-no-issuance passes with redacted
+            retained evidence.
+    - id: publication-retry
+      actor: target-user
+      action: Use issuance-success/publication-failure fixture and retry-publication without repeating
+        acquisition.
+      expected:
+        ui:
+          - The partial state preserves the certificate and publication retries do not duplicate
+            issuance or disclosure.
+        domain:
+          - Independent oracle socialcert.certificate-possession passes with redacted retained
+            evidence.
+          - Independent oracle socialcert.at-most-once-effects passes with redacted retained
+            evidence.
+          - Independent oracle socialcert.consent-scope passes with redacted retained evidence.
+assertions:
+  flowSuccess:
+    - All required independent domain oracles pass; a page success message is insufficient.
+  customerTrust:
+    - Verification, issuance, publication and discoverability are distinguishable.
+  reliabilityRepeatability:
+    - Retries respect at-most-once effects and a reproducible clean starting state.
+  telemetryObservability:
+    - Sensitive values are absent; missing correlation evidence is blocked.
+evidence:
+  screenshots: true
+  logs: true
+  privateArtifacts: Use approved private network-ops artifact storage; never commit PII/secrets.
+  runRecords: docs/proofrun/runs/*.md only after actual execution; do not create placeholder passes.

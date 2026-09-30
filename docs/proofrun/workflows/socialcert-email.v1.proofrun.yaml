@@ -1,0 +1,185 @@
+apiVersion: proofrun.dev/v1
+kind: Workflow
+metadata:
+  id: socialcert-email
+  name: Verify email and acquire a certificate honestly
+  version: 1.0.0
+  description: Authored first-wave acceptance contract; NOT RUN. Default local fixture scope only.
+  labels:
+    repository: p2ppsr/socialcert-ui
+    category: authenticate
+    executionStatus: not-run
+    fidelity: desktop-browser-fixture
+target:
+  type: web
+  url: http://127.0.0.1:8088
+  environment: local-fixture
+  admission: requires-isolated-mocked-providers-wallet-and-feedback
+  productionEvidence: false
+uses:
+  - socialcert.wave1@1.0.0
+matrix:
+  maxCases: 1
+  dimensions:
+    agent:
+      - scripted@1
+    profile:
+      - socialcert.newcomer@1.0.0
+    device:
+      - socialcert.chromium-desktop-fixture@1.0.0
+capabilities:
+  - browser.screenshot
+  - browser.dom
+  - browser.trace
+  - socialcert.fixture-isolation
+  - socialcert.domain-oracles
+budget:
+  maxCases: 1
+  maxProviderCalls: 0
+  maxInputTokens: 0
+  maxOutputTokens: 0
+  maxCostUsd: 0
+  perCase:
+    maxProviderCalls: 0
+    maxInputTokens: 0
+    maxOutputTokens: 0
+    maxCostUsd: 0
+  onExceed: block
+intelligence:
+  mode: fixed
+  initialTier: economy
+  maxEscalations: 0
+  observation:
+    mode: fixed
+    initialDetail: low
+    escalationDetail: low
+journeys:
+  - id: email
+    goal: Verify email and acquire a certificate honestly
+    role: Approved disposable fixture account holder
+    start: Clean isolated local state; no existing standing grants unless a separately declared
+      returning case requires them.
+    maxActions: 32
+    maxSeconds: 180
+    steps:
+      - id: request-code
+        instruction: Use email-address and send-code with a fixture-only disposable mailbox; leave
+          publication-consent unchecked.
+        expected: A challenge delivery stage appears with bounded progress and change-address/resend options.
+        oracleRefs:
+          - socialcert.family-availability
+          - socialcert.challenge-delivery
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+      - id: verify-code
+        instruction: Enter the fixture valid code using verification-code and verify-code; inspect the
+          intended wallet action.
+        expected: Provider verification leads to issuing, then issued only after a real wallet acquisition
+          receipt.
+        oracleRefs:
+          - socialcert.wallet-permission-baseline
+          - socialcert.verification-binding
+          - socialcert.certificate-possession
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+      - id: private-result
+        instruction: Leave disclosure unchecked and inspect the terminal result; reload after completing.
+        expected: certificate-receipt agrees with wallet state; publication-status explains private storage,
+          not public lookup.
+        oracleRefs:
+          - socialcert.private-nondisclosure
+          - socialcert.terminal-state
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+      - id: wrong-code
+        instruction: Reset to a separate isolated case; enter invalid or expired fixture code once, then use
+          the documented bounded valid recovery.
+        expected: No issuance follows invalid verification; remaining attempts and expiry errors are honest.
+        oracleRefs:
+          - socialcert.invalid-verification-no-issuance
+          - socialcert.terminal-state
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+assertions:
+  - id: independent-state-1
+    type: oracle
+    severity: fail
+    oracle: socialcert.family-availability
+    journey: email
+    statement: Required socialcert.family-availability acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-2
+    type: oracle
+    severity: fail
+    oracle: socialcert.challenge-delivery
+    journey: email
+    statement: Required socialcert.challenge-delivery acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-3
+    type: oracle
+    severity: fail
+    oracle: socialcert.wallet-permission-baseline
+    journey: email
+    statement: Required socialcert.wallet-permission-baseline acceptance agrees with actual domain state
+      and immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-4
+    type: oracle
+    severity: fail
+    oracle: socialcert.verification-binding
+    journey: email
+    statement: Required socialcert.verification-binding acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-5
+    type: oracle
+    severity: fail
+    oracle: socialcert.certificate-possession
+    journey: email
+    statement: Required socialcert.certificate-possession acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-6
+    type: oracle
+    severity: fail
+    oracle: socialcert.private-nondisclosure
+    journey: email
+    statement: Required socialcert.private-nondisclosure acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-7
+    type: oracle
+    severity: fail
+    oracle: socialcert.terminal-state
+    journey: email
+    statement: Required socialcert.terminal-state acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-8
+    type: oracle
+    severity: fail
+    oracle: socialcert.invalid-verification-no-issuance
+    journey: email
+    statement: Required socialcert.invalid-verification-no-issuance acceptance agrees with actual domain
+      state and immutable redacted evidence; missing proof cannot pass.
+policy:
+  unsafeContent: stop
+  highImpactActions: require-approval
+  allowedHosts:
+    - 127.0.0.1
+    - localhost
+  spendLimit: 0
+  spendUnit: USD
+  warnExitCode: 2
+remediation:
+  mode: manual
+  allowed: false
+  proposalOnly: true
+  requiredApprovers: 1

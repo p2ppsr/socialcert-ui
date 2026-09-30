@@ -1,0 +1,125 @@
+apiVersion: proofrun.dev/v1
+kind: Preset
+metadata:
+  id: socialcert.wave1
+  version: 1.0.0
+  name: SocialCert first-wave acceptance boundary
+requires:
+  capabilities:
+    - browser.screenshot
+    - browser.dom
+    - socialcert.fixture-isolation
+    - socialcert.domain-oracles
+fragment:
+  instructions:
+    - These contracts have not been run. Compilation is not user-flow acceptance.
+    - Default target is local fixture-only. Refuse production/provider/account/device allocation
+      without a separately approved bounded work order and exact release identity.
+    - Before actions, establish a dedicated disposable wallet/profile and fresh or returning
+      permission baseline. Never alter a personal or customer wallet.
+    - Independent domain oracles are mandatory. Missing plugin, fixture, receipt, subject binding or
+      cleanup evidence must block admission; never replace it with page text or model confidence.
+    - Provider verified, certificate issued, attributes published and independently discoverable are
+      separate states.
+    - Default model/provider budget and spend limit are zero. This does not mean owned hardware,
+      agent effort or full delivery costs are free.
+    - Evidence must exclude OAuth tokens, codes, cookies, auth signatures, mailbox/profile PII, raw
+      certificates/transactions and secret values.
+    - Engineering selectors are only for repeatable fixture checks; a later uncoached comprehension
+      trial must receive a goal, not these selectors or a successful path.
+  oracles:
+    socialcert.release-identity:
+      plugin: socialcert.release-identity
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.family-availability:
+      plugin: socialcert.family-availability
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.wallet-permission-baseline:
+      plugin: socialcert.wallet-permission-baseline
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.no-side-effects:
+      plugin: socialcert.no-side-effects
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.accessible-controls:
+      plugin: socialcert.accessible-controls
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.challenge-delivery:
+      plugin: socialcert.challenge-delivery
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.verification-binding:
+      plugin: socialcert.verification-binding
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.certificate-possession:
+      plugin: socialcert.certificate-possession
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.private-nondisclosure:
+      plugin: socialcert.private-nondisclosure
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.terminal-state:
+      plugin: socialcert.terminal-state
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.invalid-verification-no-issuance:
+      plugin: socialcert.invalid-verification-no-issuance
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.consent-scope:
+      plugin: socialcert.consent-scope
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.safe-evidence:
+      plugin: socialcert.safe-evidence
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.at-most-once-effects:
+      plugin: socialcert.at-most-once-effects
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.publication-receipt:
+      plugin: socialcert.publication-receipt
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.identity-lookup:
+      plugin: socialcert.identity-lookup
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.no-false-success:
+      plugin: socialcert.no-false-success
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.disabled-family-boundary:
+      plugin: socialcert.disabled-family-boundary
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md
+    socialcert.feedback-receipt:
+      plugin: socialcert.feedback-receipt
+      required: true
+      admission: block-if-unavailable
+      evidenceContract: docs/proofrun/oracles.md

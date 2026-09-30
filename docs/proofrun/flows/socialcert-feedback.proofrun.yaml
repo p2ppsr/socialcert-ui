@@ -1,0 +1,92 @@
+proofrunVersion: 1
+id: socialcert-feedback
+name: Help and feedback show honest delivery and recovery
+surface:
+  repo: p2ppsr/socialcert-ui
+  category: feedback
+  audience: First-time account holder with an approved disposable fixture wallet
+environment:
+  kind: local-fixture
+  baseUrl: http://127.0.0.1:8088
+  deployment:
+    system: local
+    releaseSource: Record candidate UI/backend source revisions and built artifact digests before execution.
+safety:
+  stateChanging: true
+  spendCap:
+    amount: 0
+    unit: USD
+  testIdentities:
+    - purpose: Isolated fixture-only wallet, mailbox/provider subject and feedback record
+      source: Controlled test harness; no customer or personal accounts and no secrets in YAML.
+  cleanup:
+    required: true
+    instructions: Verify per-case fixture/profile reset and receipt cleanup; never promise removal of
+      real public chain/overlay data.
+matrix:
+  desktopBrowsers:
+    - chromium
+  mobileBrowsers: []
+  mobileSimulators: []
+  desktopWallets: []
+  mobileWallets: []
+  serverWallets: []
+  networks:
+    - local-fixture
+preflight:
+  commands: []
+  requiredState:
+    - NOT RUN; no passing run record exists.
+    - "Executable definition: docs/proofrun/workflows/socialcert-feedback.v1.proofrun.yaml"
+    - Dedicated isolated fixture and mandatory domain oracle plugins registered; block admission if
+      any prerequisite is absent.
+    - Exact source/build and initial wallet permission baseline pinned; no external
+      provider/model/spending allocation permitted.
+flow:
+  steps:
+    - id: help
+      actor: target-user
+      action: Find help from an error and success page using only the visible UI.
+      expected:
+        ui:
+          - The purpose, provider/wallet recovery and support next action are understandable and
+            keyboard reachable.
+        domain:
+          - Independent oracle socialcert.accessible-controls passes with redacted retained evidence.
+    - id: submit
+      actor: target-user
+      action: Use only the local feedback fixture to submit the labelled disposable diagnostic summary
+        with no contact details or certificate payload.
+      expected:
+        ui:
+          - A delivery confirmation appears only after the independently recorded fixture receipt.
+        domain:
+          - Independent oracle socialcert.feedback-receipt passes with redacted retained evidence.
+          - Independent oracle socialcert.safe-evidence passes with redacted retained evidence.
+    - id: failure
+      actor: target-user
+      action: Make the feedback fixture unavailable, then retry once after restoring it. If the product
+        only links to support, record this submission criterion blocked.
+      expected:
+        ui:
+          - No false sent claim or duplicate report; honest failure and alternate help remain
+            available.
+        domain:
+          - Independent oracle socialcert.feedback-receipt passes with redacted retained evidence.
+          - Independent oracle socialcert.at-most-once-effects passes with redacted retained
+            evidence.
+          - Independent oracle socialcert.terminal-state passes with redacted retained evidence.
+assertions:
+  flowSuccess:
+    - All required independent domain oracles pass; a page success message is insufficient.
+  customerTrust:
+    - Verification, issuance, publication and discoverability are distinguishable.
+  reliabilityRepeatability:
+    - Retries respect at-most-once effects and a reproducible clean starting state.
+  telemetryObservability:
+    - Sensitive values are absent; missing correlation evidence is blocked.
+evidence:
+  screenshots: true
+  logs: true
+  privateArtifacts: Use approved private network-ops artifact storage; never commit PII/secrets.
+  runRecords: docs/proofrun/runs/*.md only after actual execution; do not create placeholder passes.

@@ -1,0 +1,151 @@
+apiVersion: proofrun.dev/v1
+kind: Workflow
+metadata:
+  id: socialcert-feedback
+  name: Help and feedback show honest delivery and recovery
+  version: 1.0.0
+  description: Authored first-wave acceptance contract; NOT RUN. Default local fixture scope only.
+  labels:
+    repository: p2ppsr/socialcert-ui
+    category: feedback
+    executionStatus: not-run
+    fidelity: desktop-browser-fixture
+target:
+  type: web
+  url: http://127.0.0.1:8088
+  environment: local-fixture
+  admission: requires-isolated-mocked-providers-wallet-and-feedback
+  productionEvidence: false
+uses:
+  - socialcert.wave1@1.0.0
+matrix:
+  maxCases: 1
+  dimensions:
+    agent:
+      - scripted@1
+    profile:
+      - socialcert.newcomer@1.0.0
+    device:
+      - socialcert.chromium-desktop-fixture@1.0.0
+capabilities:
+  - browser.screenshot
+  - browser.dom
+  - browser.trace
+  - socialcert.fixture-isolation
+  - socialcert.domain-oracles
+budget:
+  maxCases: 1
+  maxProviderCalls: 0
+  maxInputTokens: 0
+  maxOutputTokens: 0
+  maxCostUsd: 0
+  perCase:
+    maxProviderCalls: 0
+    maxInputTokens: 0
+    maxOutputTokens: 0
+    maxCostUsd: 0
+  onExceed: block
+intelligence:
+  mode: fixed
+  initialTier: economy
+  maxEscalations: 0
+  observation:
+    mode: fixed
+    initialDetail: low
+    escalationDetail: low
+journeys:
+  - id: feedback
+    goal: Help and feedback show honest delivery and recovery
+    role: Approved disposable fixture account holder
+    start: Clean isolated local state; no existing standing grants unless a separately declared
+      returning case requires them.
+    maxActions: 32
+    maxSeconds: 180
+    steps:
+      - id: help
+        instruction: Find help from an error and success page using only the visible UI.
+        expected: The purpose, provider/wallet recovery and support next action are understandable and
+          keyboard reachable.
+        oracleRefs:
+          - socialcert.accessible-controls
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+      - id: submit
+        instruction: Use only the local feedback fixture to submit the labelled disposable diagnostic
+          summary with no contact details or certificate payload.
+        expected: A delivery confirmation appears only after the independently recorded fixture receipt.
+        oracleRefs:
+          - socialcert.feedback-receipt
+          - socialcert.safe-evidence
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+      - id: failure
+        instruction: Make the feedback fixture unavailable, then retry once after restoring it. If the
+          product only links to support, record this submission criterion blocked.
+        expected: No false sent claim or duplicate report; honest failure and alternate help remain
+          available.
+        oracleRefs:
+          - socialcert.feedback-receipt
+          - socialcert.at-most-once-effects
+          - socialcert.terminal-state
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+assertions:
+  - id: independent-state-1
+    type: oracle
+    severity: fail
+    oracle: socialcert.accessible-controls
+    journey: feedback
+    statement: Required socialcert.accessible-controls acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-2
+    type: oracle
+    severity: fail
+    oracle: socialcert.feedback-receipt
+    journey: feedback
+    statement: Required socialcert.feedback-receipt acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-3
+    type: oracle
+    severity: fail
+    oracle: socialcert.safe-evidence
+    journey: feedback
+    statement: Required socialcert.safe-evidence acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-4
+    type: oracle
+    severity: fail
+    oracle: socialcert.at-most-once-effects
+    journey: feedback
+    statement: Required socialcert.at-most-once-effects acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-5
+    type: oracle
+    severity: fail
+    oracle: socialcert.terminal-state
+    journey: feedback
+    statement: Required socialcert.terminal-state acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+policy:
+  unsafeContent: stop
+  highImpactActions: require-approval
+  allowedHosts:
+    - 127.0.0.1
+    - localhost
+  spendLimit: 0
+  spendUnit: USD
+  warnExitCode: 2
+remediation:
+  mode: manual
+  allowed: false
+  proposalOnly: true
+  requiredApprovers: 1

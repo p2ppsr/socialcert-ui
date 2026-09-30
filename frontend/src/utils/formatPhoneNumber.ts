@@ -12,7 +12,7 @@ export const formatPhoneNumber = (phoneNumber: string): string => {
       cleanNumber.substring(0, len)
     )
     // This array should be populated with actual country code data to find the longest matching country code
-    countryCode = possibleCodes.find((code) => cleanNumber.substring(0, 1))!
+    countryCode = possibleCodes.find((_code) => cleanNumber.substring(0, 1))!
   }
 
   // Remaining number after country code

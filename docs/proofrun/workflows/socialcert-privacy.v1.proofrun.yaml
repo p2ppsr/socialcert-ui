@@ -1,0 +1,189 @@
+apiVersion: proofrun.dev/v1
+kind: Workflow
+metadata:
+  id: socialcert-privacy
+  name: Private certificate and consented public identity lookup
+  version: 1.0.0
+  description: Authored first-wave acceptance contract; NOT RUN. Default local fixture scope only.
+  labels:
+    repository: p2ppsr/socialcert-ui
+    category: redeem
+    executionStatus: not-run
+    fidelity: desktop-browser-fixture
+target:
+  type: web
+  url: http://127.0.0.1:8088
+  environment: local-fixture
+  admission: requires-isolated-mocked-providers-wallet-and-feedback
+  productionEvidence: false
+uses:
+  - socialcert.wave1@1.0.0
+matrix:
+  maxCases: 1
+  dimensions:
+    agent:
+      - scripted@1
+    profile:
+      - socialcert.newcomer@1.0.0
+    device:
+      - socialcert.chromium-desktop-fixture@1.0.0
+capabilities:
+  - browser.screenshot
+  - browser.dom
+  - browser.trace
+  - socialcert.fixture-isolation
+  - socialcert.domain-oracles
+budget:
+  maxCases: 1
+  maxProviderCalls: 0
+  maxInputTokens: 0
+  maxOutputTokens: 0
+  maxCostUsd: 0
+  perCase:
+    maxProviderCalls: 0
+    maxInputTokens: 0
+    maxOutputTokens: 0
+    maxCostUsd: 0
+  onExceed: block
+intelligence:
+  mode: fixed
+  initialTier: economy
+  maxEscalations: 0
+  observation:
+    mode: fixed
+    initialDetail: low
+    escalationDetail: low
+journeys:
+  - id: privacy
+    goal: Private certificate and consented public identity lookup
+    role: Approved disposable fixture account holder
+    start: Clean isolated local state; no existing standing grants unless a separately declared
+      returning case requires them.
+    maxActions: 32
+    maxSeconds: 180
+    steps:
+      - id: private
+        instruction: Acquire one certificate in the private fixture case without checking publication-consent.
+        expected: No new public attribute is submitted or discoverable; private certificate remains usable
+          in the wallet.
+        oracleRefs:
+          - socialcert.certificate-possession
+          - socialcert.private-nondisclosure
+          - socialcert.consent-scope
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+      - id: publish
+        instruction: Reset to the declared consented case; inspect and explicitly select
+          publication-consent, then complete publication.
+        expected: Only the selected attributes are revealed after genuine acquisition; UI distinguishes
+          issued from publishing/complete.
+        oracleRefs:
+          - socialcert.wallet-permission-baseline
+          - socialcert.publication-receipt
+          - socialcert.consent-scope
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+      - id: independent-lookup
+        instruction: Use the independent relying-party fixture to resolve the disposable test subject after
+          publication and after reload.
+        expected: Human label, certifier/family/subject/trust and overlay evidence agree; not-found is
+          distinct from query failure.
+        oracleRefs:
+          - socialcert.identity-lookup
+          - socialcert.terminal-state
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+      - id: publication-failure
+        instruction: Inject publication failure after successful issuance in the local fixture; inspect
+          partial state and retry-publication.
+        expected: The certificate stays issued; only publication retries; no renewed provider verification,
+          extra issuance or expanded disclosure.
+        oracleRefs:
+          - socialcert.certificate-possession
+          - socialcert.at-most-once-effects
+          - socialcert.terminal-state
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+assertions:
+  - id: independent-state-1
+    type: oracle
+    severity: fail
+    oracle: socialcert.certificate-possession
+    journey: privacy
+    statement: Required socialcert.certificate-possession acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-2
+    type: oracle
+    severity: fail
+    oracle: socialcert.private-nondisclosure
+    journey: privacy
+    statement: Required socialcert.private-nondisclosure acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-3
+    type: oracle
+    severity: fail
+    oracle: socialcert.consent-scope
+    journey: privacy
+    statement: Required socialcert.consent-scope acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-4
+    type: oracle
+    severity: fail
+    oracle: socialcert.wallet-permission-baseline
+    journey: privacy
+    statement: Required socialcert.wallet-permission-baseline acceptance agrees with actual domain state
+      and immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-5
+    type: oracle
+    severity: fail
+    oracle: socialcert.publication-receipt
+    journey: privacy
+    statement: Required socialcert.publication-receipt acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-6
+    type: oracle
+    severity: fail
+    oracle: socialcert.identity-lookup
+    journey: privacy
+    statement: Required socialcert.identity-lookup acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-7
+    type: oracle
+    severity: fail
+    oracle: socialcert.terminal-state
+    journey: privacy
+    statement: Required socialcert.terminal-state acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-8
+    type: oracle
+    severity: fail
+    oracle: socialcert.at-most-once-effects
+    journey: privacy
+    statement: Required socialcert.at-most-once-effects acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+policy:
+  unsafeContent: stop
+  highImpactActions: require-approval
+  allowedHosts:
+    - 127.0.0.1
+    - localhost
+  spendLimit: 0
+  spendUnit: USD
+  warnExitCode: 2
+remediation:
+  mode: manual
+  allowed: false
+  proposalOnly: true
+  requiredApprovers: 1

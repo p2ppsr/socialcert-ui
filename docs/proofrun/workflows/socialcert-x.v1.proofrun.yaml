@@ -1,0 +1,183 @@
+apiVersion: proofrun.dev/v1
+kind: Workflow
+metadata:
+  id: socialcert-x
+  name: X provider handoff and certificate acquisition
+  version: 1.0.0
+  description: Authored first-wave acceptance contract; NOT RUN. Default local fixture scope only.
+  labels:
+    repository: p2ppsr/socialcert-ui
+    category: authenticate
+    executionStatus: not-run
+    fidelity: desktop-browser-fixture
+target:
+  type: web
+  url: http://127.0.0.1:8088
+  environment: local-fixture
+  admission: requires-isolated-mocked-providers-wallet-and-feedback
+  productionEvidence: false
+uses:
+  - socialcert.wave1@1.0.0
+matrix:
+  maxCases: 1
+  dimensions:
+    agent:
+      - scripted@1
+    profile:
+      - socialcert.newcomer@1.0.0
+    device:
+      - socialcert.chromium-desktop-fixture@1.0.0
+capabilities:
+  - browser.screenshot
+  - browser.dom
+  - browser.trace
+  - socialcert.fixture-isolation
+  - socialcert.domain-oracles
+budget:
+  maxCases: 1
+  maxProviderCalls: 0
+  maxInputTokens: 0
+  maxOutputTokens: 0
+  maxCostUsd: 0
+  perCase:
+    maxProviderCalls: 0
+    maxInputTokens: 0
+    maxOutputTokens: 0
+    maxCostUsd: 0
+  onExceed: block
+intelligence:
+  mode: fixed
+  initialTier: economy
+  maxEscalations: 0
+  observation:
+    mode: fixed
+    initialDetail: low
+    escalationDetail: low
+journeys:
+  - id: x
+    goal: X provider handoff and certificate acquisition
+    role: Approved disposable fixture account holder
+    start: Clean isolated local state; no existing standing grants unless a separately declared
+      returning case requires them.
+    maxActions: 32
+    maxSeconds: 180
+    steps:
+      - id: provider-handoff
+        instruction: Choose family-x and oauth-start using a local provider redirect fixture with
+          publication-consent unchecked.
+        expected: The provider, purpose and disclosure choice are clear before redirect.
+        oracleRefs:
+          - socialcert.family-availability
+          - socialcert.wallet-permission-baseline
+          - socialcert.consent-scope
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+      - id: provider-return
+        instruction: Return through the valid X callback fixture and inspect verification, issuing and
+          certificate receipt.
+        expected: The verified provider subject matches the acquired certificate; token/code values are
+          absent from retained traces.
+        oracleRefs:
+          - socialcert.verification-binding
+          - socialcert.certificate-possession
+          - socialcert.safe-evidence
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+      - id: cancel-retry
+        instruction: In a fresh isolated state cancel or expire the provider callback; use start-over and
+          retry with a newly valid fixture.
+        expected: No false certificate receipt, duplicate effect or indefinite spinner; retry reaches a
+          truthful terminal result.
+        oracleRefs:
+          - socialcert.invalid-verification-no-issuance
+          - socialcert.at-most-once-effects
+          - socialcert.terminal-state
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+assertions:
+  - id: independent-state-1
+    type: oracle
+    severity: fail
+    oracle: socialcert.family-availability
+    journey: x
+    statement: Required socialcert.family-availability acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-2
+    type: oracle
+    severity: fail
+    oracle: socialcert.wallet-permission-baseline
+    journey: x
+    statement: Required socialcert.wallet-permission-baseline acceptance agrees with actual domain state
+      and immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-3
+    type: oracle
+    severity: fail
+    oracle: socialcert.consent-scope
+    journey: x
+    statement: Required socialcert.consent-scope acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-4
+    type: oracle
+    severity: fail
+    oracle: socialcert.verification-binding
+    journey: x
+    statement: Required socialcert.verification-binding acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-5
+    type: oracle
+    severity: fail
+    oracle: socialcert.certificate-possession
+    journey: x
+    statement: Required socialcert.certificate-possession acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-6
+    type: oracle
+    severity: fail
+    oracle: socialcert.safe-evidence
+    journey: x
+    statement: Required socialcert.safe-evidence acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-7
+    type: oracle
+    severity: fail
+    oracle: socialcert.invalid-verification-no-issuance
+    journey: x
+    statement: Required socialcert.invalid-verification-no-issuance acceptance agrees with actual domain
+      state and immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-8
+    type: oracle
+    severity: fail
+    oracle: socialcert.at-most-once-effects
+    journey: x
+    statement: Required socialcert.at-most-once-effects acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-9
+    type: oracle
+    severity: fail
+    oracle: socialcert.terminal-state
+    journey: x
+    statement: Required socialcert.terminal-state acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+policy:
+  unsafeContent: stop
+  highImpactActions: require-approval
+  allowedHosts:
+    - 127.0.0.1
+    - localhost
+  spendLimit: 0
+  spendUnit: USD
+  warnExitCode: 2
+remediation:
+  mode: manual
+  allowed: false
+  proposalOnly: true
+  requiredApprovers: 1

@@ -3,7 +3,7 @@ import "./VerifyCodeInput.scss"
 
 interface VerifyCodeInputProps {
   onChange: (value: string) => void
-  handleSubmit: any
+  handleSubmit: (event: React.FormEvent | React.MouseEvent) => Promise<void> | void
 }
 
 const VerifyCodeInput: React.FC<VerifyCodeInputProps> = ({
