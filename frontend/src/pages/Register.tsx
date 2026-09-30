@@ -1,73 +1,11 @@
-import React from "react"
-import { useNavigate } from "react-router-dom"
-import "react-toastify/dist/ReactToastify.css"
-
-// Assets
-import { FaDiscord, FaPhoneAlt } from "react-icons/fa"
-import { FaXTwitter } from "react-icons/fa6"
-import { IoIosMail } from "react-icons/io"
-import socialCertLogo from "../assets/images/socialCert.svg"
-
-const Register = () => {
-  const navigate = useNavigate()
-
-  // const handleDiscordClick = async () => {
-  //   const hostname = window.location.hostname
-
-  //   if (hostname.includes("staging")) {
-  //     return (window.location.href =
-  //       "https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=https%3A%2F%2Fstaging.socialcert.net%2FdiscordVerification&scope=identify")
-  //   } else if (hostname.includes("localhost")) {
-  //     return (window.location.href =
-  //       "https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8088%2FdiscordVerification&scope=identify")
-  //   } else {
-  //     return (window.location.href =
-  //       "https://discord.com/oauth2/authorize?client_id=1202716017055375421&response_type=code&redirect_uri=https%3A%2F%2Fsocialcert.net%2FdiscordVerification&scope=identify")
-  //   }
-  // }
-
-  return (
-    <div className="container">
-      <div className="sub-container">
-        <div className="sub-container-2">
-          <h2 style={{ margin: 0 }}>Welcome to</h2>
-          <img src={socialCertLogo} width={300} className="main-logo" />
-        </div>
-      </div>
-      <p style={{ marginBottom: "2rem" }}>
-        Access the MetaNet using your own certified identity{" "}
-      </p>
-
-      <h3>Choose your desired identity certification</h3>
-      <div className="flex button-group">
-        {/* <button
-          id="phone-cert-button"
-          onClick={() => navigate("/PhoneVerification")}
-        >
-          <FaPhoneAlt />
-          <label>Phone Number</label>
-        </button> */}
-
-        <button id="discord-cert-button" onClick={() => navigate("/discordVerification")}>
-          <FaDiscord />
-          <label>Discord</label>
-        </button>
-
-        <button id="x-cert-button" onClick={() => navigate("/XVerification")}>
-          <FaXTwitter />
-          X/Twitter
-        </button>
-
-        <button
-          id="email-cert-button"
-          onClick={() => navigate("/EmailVerification")}
-        >
-          <IoIosMail />
-          Email
-        </button>
-      </div>
-    </div>
-  )
+import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { families, loadMetadata, Metadata, requireFamily } from '../utils/certification'
+import Page from '../components/Page'
+export default function Register() {
+  const [metadata,setMetadata] = useState<Metadata>()
+  const [error,setError] = useState(false)
+  const check = () => { setError(false); loadMetadata().then(setMetadata).catch(() => {setMetadata(undefined);setError(true)}) }
+  useEffect(check,[])
+  return <Page><section className="hero"><p className="eyebrow">Your accounts. Your wallet.</p><h1>Prove an account is yours.</h1><p>Verify your email, X or Discord account and save a signed certificate in your BSV wallet. Compatible apps can use it to recognise your account.</p><p>Certificates stay private unless you explicitly choose to publish attributes. You need a compatible wallet and access to the account you verify.</p></section><section aria-labelledby="choose"><h2 id="choose">Choose an account to verify</h2><p className="notice" role="status">{metadata ? 'The service reports these supported methods. Provider availability is checked during verification.' : error ? 'The service could not be checked. No certification requests have been sent.' : 'Checking available methods…'}</p>{error && <button onClick={check}>Retry service check</button>}<div className="family-grid">{(Object.keys(families) as (keyof typeof families)[]).map(family => { let enabled=false; if(metadata) try {requireFamily(metadata,family);enabled=true} catch {} return <article key={family}><h3>{families[family].name}</h3><p>{family==='email' ? 'Receive a verification code in your inbox.' : 'Sign in with your account provider.'}</p>{enabled ? <Link className="button" data-testid={`family-${family}`} to={family==='email'?'/EmailVerification':family==='x'?'/XVerification':'/DiscordVerification'}>Verify {families[family].name}</Link> : <span>Unavailable until service check passes</span>}</article>})}</div><p data-testid="phone-unavailable">Telephone certification is currently unavailable.</p></section></Page>
 }
-
-export default Register

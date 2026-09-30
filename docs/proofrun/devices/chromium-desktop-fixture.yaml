@@ -1,0 +1,29 @@
+apiVersion: proofrun.dev/v1
+kind: DeviceProfile
+metadata:
+  id: socialcert.chromium-desktop-fixture
+  version: 1.0.0
+  name: Isolated desktop Chromium fixture
+platform: web
+driver: playwright
+screen:
+  width: 1440
+  height: 900
+  scale: 1
+  orientation: landscape
+  colorScheme: light
+browser:
+  engine: chromium
+  channel: stable
+capabilities:
+  - browser.screenshot
+  - browser.dom
+  - browser.trace
+  - socialcert.fixture-isolation
+  - socialcert.domain-oracles
+accessibility:
+  - keyboard
+  - axe
+isolation:
+  ephemeral: true
+  networkPolicy: allowlisted

@@ -1,0 +1,173 @@
+apiVersion: proofrun.dev/v1
+kind: Workflow
+metadata:
+  id: socialcert-recovery
+  name: Interrupted issuance and publication recover without false success
+  version: 1.0.0
+  description: Authored first-wave acceptance contract; NOT RUN. Default local fixture scope only.
+  labels:
+    repository: p2ppsr/socialcert-ui
+    category: recovery
+    executionStatus: not-run
+    fidelity: desktop-browser-fixture
+target:
+  type: web
+  url: http://127.0.0.1:8088
+  environment: local-fixture
+  admission: requires-isolated-mocked-providers-wallet-and-feedback
+  productionEvidence: false
+uses:
+  - socialcert.wave1@1.0.0
+matrix:
+  maxCases: 1
+  dimensions:
+    agent:
+      - scripted@1
+    profile:
+      - socialcert.newcomer@1.0.0
+    device:
+      - socialcert.chromium-desktop-fixture@1.0.0
+capabilities:
+  - browser.screenshot
+  - browser.dom
+  - browser.trace
+  - socialcert.fixture-isolation
+  - socialcert.domain-oracles
+budget:
+  maxCases: 1
+  maxProviderCalls: 0
+  maxInputTokens: 0
+  maxOutputTokens: 0
+  maxCostUsd: 0
+  perCase:
+    maxProviderCalls: 0
+    maxInputTokens: 0
+    maxOutputTokens: 0
+    maxCostUsd: 0
+  onExceed: block
+intelligence:
+  mode: fixed
+  initialTier: economy
+  maxEscalations: 0
+  observation:
+    mode: fixed
+    initialDetail: low
+    escalationDetail: low
+journeys:
+  - id: recovery
+    goal: Interrupted issuance and publication recover without false success
+    role: Approved disposable fixture account holder
+    start: Clean isolated local state; no existing standing grants unless a separately declared
+      returning case requires them.
+    maxActions: 32
+    maxSeconds: 180
+    steps:
+      - id: acquisition-failure
+        instruction: Use verified-email fixture with wallet acquisition denial/error; inspect flow-status
+          and direct result navigation.
+        expected: No certificate-receipt or issued claim is fabricated; retry-issuance is available only
+          with eligible verification.
+        oracleRefs:
+          - socialcert.no-false-success
+          - socialcert.terminal-state
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+      - id: retry
+        instruction: Retry acquisition once with the controlled recovered wallet fixture; double-click or
+          refresh only inside this isolated local harness.
+        expected: At most one intended acquisition completes; terminal receipt and state agree.
+        oracleRefs:
+          - socialcert.certificate-possession
+          - socialcert.at-most-once-effects
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+      - id: interruption
+        instruction: Repeat with declared pending/back/refresh and expired-verification fixtures; resume
+          through visible recovery actions.
+        expected: Each stage terminates honestly; stale verification restarts the provider/challenge flow
+          instead of claiming success.
+        oracleRefs:
+          - socialcert.terminal-state
+          - socialcert.invalid-verification-no-issuance
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+      - id: publication-retry
+        instruction: Use issuance-success/publication-failure fixture and retry-publication without
+          repeating acquisition.
+        expected: The partial state preserves the certificate and publication retries do not duplicate
+          issuance or disclosure.
+        oracleRefs:
+          - socialcert.certificate-possession
+          - socialcert.at-most-once-effects
+          - socialcert.consent-scope
+        evidence:
+          - screenshot
+          - trace
+          - log
+        onFailure: stop
+assertions:
+  - id: independent-state-1
+    type: oracle
+    severity: fail
+    oracle: socialcert.no-false-success
+    journey: recovery
+    statement: Required socialcert.no-false-success acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-2
+    type: oracle
+    severity: fail
+    oracle: socialcert.terminal-state
+    journey: recovery
+    statement: Required socialcert.terminal-state acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-3
+    type: oracle
+    severity: fail
+    oracle: socialcert.certificate-possession
+    journey: recovery
+    statement: Required socialcert.certificate-possession acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-4
+    type: oracle
+    severity: fail
+    oracle: socialcert.at-most-once-effects
+    journey: recovery
+    statement: Required socialcert.at-most-once-effects acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-5
+    type: oracle
+    severity: fail
+    oracle: socialcert.invalid-verification-no-issuance
+    journey: recovery
+    statement: Required socialcert.invalid-verification-no-issuance acceptance agrees with actual domain
+      state and immutable redacted evidence; missing proof cannot pass.
+  - id: independent-state-6
+    type: oracle
+    severity: fail
+    oracle: socialcert.consent-scope
+    journey: recovery
+    statement: Required socialcert.consent-scope acceptance agrees with actual domain state and
+      immutable redacted evidence; missing proof cannot pass.
+policy:
+  unsafeContent: stop
+  highImpactActions: require-approval
+  allowedHosts:
+    - 127.0.0.1
+    - localhost
+  spendLimit: 0
+  spendUnit: USD
+  warnExitCode: 2
+remediation:
+  mode: manual
+  allowed: false
+  proposalOnly: true
+  requiredApprovers: 1

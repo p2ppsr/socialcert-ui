@@ -1,29 +1,11 @@
-
-// Helper function to determine the base URL based on the hostname
-export const getBaseUrl = (): string => {
-  const hostname = window.location.hostname
-  if (hostname.includes("staging")) {
-    return "https://staging-backend.socialcert.net"
-  } else if (hostname.includes("localhost")) {
-    return "http://localhost:8080"
-  } else {
-    return "https://backend.socialcert.net"
-  }
+export const getBaseUrl = (hostname = window.location.hostname): string => {
+  if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]') return 'http://localhost:8080'
+  if (hostname === 'staging.socialcert.net') return 'https://staging-backend.socialcert.net'
+  if (hostname === 'socialcert.net' || hostname === 'www.socialcert.net') return 'https://backend.socialcert.net'
+  throw new Error('This host is not configured for Social Cert. Open socialcert.net or a supported local environment.')
 }
-
-export const getBackendUrl = (certType: string) => {
-
-  // Mapping of certificate types to their respective paths
-  const paths: Record<string, string> = {
-    phone: "/sendVerificationText",
-    email: "/handleEmailVerification",
-    X: "/handleXVerification",
-    discord: "/handleDiscordVerification"
-  }
-
-  const baseUrl = getBaseUrl()
-  const path = paths[certType]
-
-  // Construct the full URL
-  return `${baseUrl}${path}`
+export const getBackendUrl = (family: string): string => {
+  const paths: Record<string, string> = { email: '/handleEmailVerification', X: '/handleXVerification', x: '/handleXVerification', discord: '/handleDiscordVerification' }
+  if (!paths[family]) throw new Error('This certificate family is unavailable.')
+  return getBaseUrl() + paths[family]
 }

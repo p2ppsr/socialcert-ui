@@ -1,0 +1,82 @@
+proofrunVersion: 1
+id: socialcert-phone-disabled
+name: Unavailable telephone family remains unavailable
+surface:
+  repo: p2ppsr/socialcert-ui
+  category: discover
+  audience: First-time account holder with an approved disposable fixture wallet
+environment:
+  kind: local-fixture
+  baseUrl: http://127.0.0.1:8088
+  deployment:
+    system: local
+    releaseSource: Record candidate UI/backend source revisions and built artifact digests before execution.
+safety:
+  stateChanging: false
+  spendCap:
+    amount: 0
+    unit: USD
+  testIdentities:
+    - purpose: Isolated fixture-only wallet, mailbox/provider subject and feedback record
+      source: Controlled test harness; no customer or personal accounts and no secrets in YAML.
+  cleanup:
+    required: true
+    instructions: Verify per-case fixture/profile reset and receipt cleanup; never promise removal of
+      real public chain/overlay data.
+matrix:
+  desktopBrowsers:
+    - chromium
+  mobileBrowsers: []
+  mobileSimulators: []
+  desktopWallets: []
+  mobileWallets: []
+  serverWallets: []
+  networks:
+    - local-fixture
+preflight:
+  commands: []
+  requiredState:
+    - NOT RUN; no passing run record exists.
+    - "Executable definition: docs/proofrun/workflows/socialcert-phone-disabled.v1.proofrun.yaml"
+    - Dedicated isolated fixture and mandatory domain oracle plugins registered; block admission if
+      any prerequisite is absent.
+    - Exact source/build and initial wallet permission baseline pinned; no external
+      provider/model/spending allocation permitted.
+flow:
+  steps:
+    - id: availability
+      actor: target-user
+      action: Inspect family availability and phone-unavailable on the homepage without submitting a phone
+        number.
+      expected:
+        ui:
+          - Telephone is clearly unavailable; supported alternative families are obvious.
+        domain:
+          - Independent oracle socialcert.family-availability passes with redacted retained evidence.
+          - Independent oracle socialcert.no-side-effects passes with redacted retained evidence.
+    - id: deep-link
+      actor: target-user
+      action: Open /PhoneVerification and the old phone-code route with no supplied state; do not contact
+        an SMS provider.
+      expected:
+        ui:
+          - An honest unavailable-family explanation/help replaces issuance controls; no legacy
+            route silently starts sending.
+        domain:
+          - Independent oracle socialcert.disabled-family-boundary passes with redacted retained
+            evidence.
+          - Independent oracle socialcert.no-side-effects passes with redacted retained evidence.
+assertions:
+  flowSuccess:
+    - All required independent domain oracles pass; a page success message is insufficient.
+  customerTrust:
+    - Verification, issuance, publication and discoverability are distinguishable.
+  reliabilityRepeatability:
+    - Retries respect at-most-once effects and a reproducible clean starting state.
+  telemetryObservability:
+    - Sensitive values are absent; missing correlation evidence is blocked.
+evidence:
+  screenshots: true
+  logs: true
+  privateArtifacts: Use approved private network-ops artifact storage; never commit PII/secrets.
+  runRecords: docs/proofrun/runs/*.md only after actual execution; do not create placeholder passes.

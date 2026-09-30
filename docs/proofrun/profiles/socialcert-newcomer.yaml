@@ -1,0 +1,49 @@
+apiVersion: proofrun.dev/v1
+kind: CustomerProfile
+metadata:
+  id: socialcert.newcomer
+  version: 1.0.0
+  name: First-time SocialCert account holder
+actor:
+  role: Account holder evaluating identity certification
+  segment: Browser users who know their email or social login and use a supported wallet
+  situation: Wants a reusable account-control proof and understands neither certificate jargon nor
+    public disclosure implications.
+  responsibilities:
+    - Protect account access and privacy
+    - Inspect wallet approval and disclosure consequences
+  successCriteria:
+    - Understand what proof is created
+    - Acquire it or receive an honest recoverable error
+    - Choose whether selected attributes become public
+  priorKnowledge:
+    - Ordinary browser navigation
+    - Own email or provider login
+  constraints:
+    - No maintainer knowledge
+    - Uses only approved disposable fixtures for these authored contracts
+traits:
+  goals:
+    - Understand account-control proof
+    - Complete certification privately first
+  domainFamiliarity: 0.1
+  technicalConfidence: 0.4
+  riskTolerance: 0.1
+  language: en-US
+  readingLevel: general
+  accessibilityNeeds:
+    - Keyboard navigation
+cognition:
+  attentionBudget: 30
+  confusionThreshold: 18
+  jargonTolerance: 0.1
+  patienceActions: 24
+  maxIdleSeconds: 15
+  onConfused: ask
+  onBored: abandon
+provenance:
+  basis: operator-hypothesis
+  evidenceRefs: []
+  limitations: Uncalibrated role hypothesis; no claim of demographic representation or actual customer
+    acceptance. Live mailbox/provider accounts, permitted wallet state and domain oracle integration
+    are prerequisites for separately authorized real execution.

@@ -31,9 +31,13 @@ jobs:
         working-directory: frontend
         run: npm ci
 
-      - name: Build frontend
+      - name: Validate and build frontend
         working-directory: frontend
-        run: npm run build
+        run: |
+          npm run lint
+          npm run typecheck
+          npm test
+          npm run build
 
       - name: Build CARS artifact
         run: npx cars build 1

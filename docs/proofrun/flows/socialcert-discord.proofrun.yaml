@@ -1,0 +1,99 @@
+proofrunVersion: 1
+id: socialcert-discord
+name: Discord provider handoff and certificate acquisition
+surface:
+  repo: p2ppsr/socialcert-ui
+  category: authenticate
+  audience: First-time account holder with an approved disposable fixture wallet
+environment:
+  kind: local-fixture
+  baseUrl: http://127.0.0.1:8088
+  deployment:
+    system: local
+    releaseSource: Record candidate UI/backend source revisions and built artifact digests before execution.
+safety:
+  stateChanging: true
+  spendCap:
+    amount: 0
+    unit: USD
+  testIdentities:
+    - purpose: Isolated fixture-only wallet, mailbox/provider subject and feedback record
+      source: Controlled test harness; no customer or personal accounts and no secrets in YAML.
+  cleanup:
+    required: true
+    instructions: Verify per-case fixture/profile reset and receipt cleanup; never promise removal of
+      real public chain/overlay data.
+matrix:
+  desktopBrowsers:
+    - chromium
+  mobileBrowsers: []
+  mobileSimulators: []
+  desktopWallets: []
+  mobileWallets: []
+  serverWallets: []
+  networks:
+    - local-fixture
+preflight:
+  commands: []
+  requiredState:
+    - NOT RUN; no passing run record exists.
+    - "Executable definition: docs/proofrun/workflows/socialcert-discord.v1.proofrun.yaml"
+    - Dedicated isolated fixture and mandatory domain oracle plugins registered; block admission if
+      any prerequisite is absent.
+    - Exact source/build and initial wallet permission baseline pinned; no external
+      provider/model/spending allocation permitted.
+flow:
+  steps:
+    - id: provider-handoff
+      actor: target-user
+      action: Choose family-discord and oauth-start using a local Discord fixture with disclosure
+        unchecked.
+      expected:
+        ui:
+          - The account-control purpose and public/private choice are explained before redirect.
+        domain:
+          - Independent oracle socialcert.family-availability passes with redacted retained evidence.
+          - Independent oracle socialcert.wallet-permission-baseline passes with redacted retained
+            evidence.
+          - Independent oracle socialcert.consent-scope passes with redacted retained evidence.
+    - id: provider-return
+      actor: target-user
+      action: Return through the valid Discord callback fixture and inspect the wallet acquisition result.
+      expected:
+        ui:
+          - The certificate subject/fields match provider verification, and a receipt exists before
+            success.
+        domain:
+          - Independent oracle socialcert.verification-binding passes with redacted retained
+            evidence.
+          - Independent oracle socialcert.certificate-possession passes with redacted retained
+            evidence.
+          - Independent oracle socialcert.safe-evidence passes with redacted retained evidence.
+    - id: cancel-retry
+      actor: target-user
+      action: Reset isolation; cancel, expire or interrupt the provider return, then retry with a newly
+        valid fixture.
+      expected:
+        ui:
+          - The user can recover without duplicate acquisition, stale callback reuse or a false
+            success page.
+        domain:
+          - Independent oracle socialcert.invalid-verification-no-issuance passes with redacted
+            retained evidence.
+          - Independent oracle socialcert.at-most-once-effects passes with redacted retained
+            evidence.
+          - Independent oracle socialcert.terminal-state passes with redacted retained evidence.
+assertions:
+  flowSuccess:
+    - All required independent domain oracles pass; a page success message is insufficient.
+  customerTrust:
+    - Verification, issuance, publication and discoverability are distinguishable.
+  reliabilityRepeatability:
+    - Retries respect at-most-once effects and a reproducible clean starting state.
+  telemetryObservability:
+    - Sensitive values are absent; missing correlation evidence is blocked.
+evidence:
+  screenshots: true
+  logs: true
+  privateArtifacts: Use approved private network-ops artifact storage; never commit PII/secrets.
+  runRecords: docs/proofrun/runs/*.md only after actual execution; do not create placeholder passes.

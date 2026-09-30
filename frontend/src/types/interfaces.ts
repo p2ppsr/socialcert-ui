@@ -1,24 +1,24 @@
-interface PhoneNumberData {
+export interface PhoneNumberData {
   phoneNumber: string;
   funcAction: string;
 }
 
-interface PhoneVerificationResponse {
+export interface PhoneVerificationResponse {
   textSentStatus: boolean;
   textSentPhonenumber: string;
 }
 
-interface VerificationData {
+export interface VerificationData {
   phoneNumber: string;
   verificationCode: string;
   funcAction: string;
 }
 
-interface VerificationResponse {
+export interface VerificationResponse {
   verificationStatus?: boolean;
   verifiedPhonenumber?: string;  // Optional, as the backend may not return it on failures
 }
 
-interface SigniaData {
+export interface SigniaData {
   verifiedPhonenumber: string;
 }

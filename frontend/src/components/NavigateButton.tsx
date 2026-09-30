@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom"
 
 interface GoBackButtonProps {
   navigatePath: string | undefined
-  style?: Object
+  style?: React.CSSProperties
   label: string
 }
 
