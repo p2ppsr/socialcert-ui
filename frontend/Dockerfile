@@ -11,7 +11,7 @@ RUN npm run build
 RUN node -e "require('fs').writeFileSync('/app/build/release.json',JSON.stringify({sourceCommit:process.env.SOURCE_COMMIT,version:require('./package.json').version}))"
 
 # Stage 2: Serve with Nginx
-FROM nginx:latest
+FROM docker.io/library/nginx:1.31.9@sha256:84f7876d21d154885f99554d7ae325d8c2213f9169726ea7ab60642f2573a787
 ARG SOURCE_COMMIT=development
 LABEL org.opencontainers.image.revision=${SOURCE_COMMIT}
 EXPOSE 80
